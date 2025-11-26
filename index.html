@@ -571,5 +571,90 @@
             });
         });
     </script>
+    <script>
+    // ... (Your existing dark mode/menu scripts here) ...
+
+    // --- LOAD USER POSTS ---
+    function loadUserPosts() {
+        const posts = JSON.parse(localStorage.getItem('artSharePosts')) || [];
+        const mainContainer = document.querySelector('main');
+        
+        // Loop through posts and add them to the TOP of the main container
+        // We iterate in reverse so the newest (which is at index 0) stays at top
+        // Or simply use insertAdjacentHTML('afterbegin')
+        
+        // Remove this loop if you want to keep mock posts below user posts
+        // iterating backwards to keep order correct when using afterbegin
+        for (let i = posts.length - 1; i >= 0; i--) {
+            const post = posts[i];
+            
+            const postHTML = `
+            <div class="art-post">
+                <div class="post-header">
+                    <div class="user-info">
+                        <img class="avatar" src="${post.userAvatar}" alt="User Avatar">
+                        <div class="username">${post.username}</div>
+                    </div>
+                    <i class="fas fa-ellipsis-h post-options"></i>
+                </div>
+                
+                <div class="post-image-container">
+                    <img class="post-image" src="${post.image}" alt="User Post">
+                </div>
+
+                <div class="post-actions">
+                    <i class="far fa-heart post-like-btn" onclick="this.classList.toggle('fas');this.classList.toggle('far');this.style.color=this.classList.contains('fas')?'red':'inherit'"></i>
+                    <i class="far fa-comment"></i>
+                    <i class="far fa-paper-plane"></i>
+                    <i class="far fa-bookmark last"></i>
+                </div>
+                
+                <span class="likes-count">0 likes</span>
+
+                <div class="post-caption">
+                    <span class="user-link">${post.username}</span> ${post.caption}
+                </div>
+            </div>
+            `;
+            
+            mainContainer.insertAdjacentHTML('afterbegin', postHTML);
+        }
+    }
+
+    // Call this when page loads
+    loadUserPosts();
+</script>
+
+#### 2. Add this to `profile.html` (Profile Page)
+Put this script at the bottom of your `profile.html` file. It adds the posts to your grid and updates the "Posts" count.
+
+```html
+<script>
+    // ... (Your existing scripts) ...
+
+    // --- LOAD USER POSTS TO GRID ---
+    function loadProfileGrid() {
+        const posts = JSON.parse(localStorage.getItem('artSharePosts')) || [];
+        const gridContainer = document.querySelector('.explore-grid');
+        const statCount = document.querySelector('.stat-num'); // The first one is Posts count
+
+        // Update Post Count
+        // Existing static count is 1, so we add length of new posts
+        if(statCount) statCount.textContent = 1 + posts.length;
+
+        // Add posts to grid
+        posts.forEach(post => {
+            const gridHTML = `
+                <div class="explore-item">
+                    <img src="${post.image}" alt="My Post">
+                </div>
+            `;
+            // Add to beginning of grid
+            gridContainer.insertAdjacentHTML('afterbegin', gridHTML);
+        });
+    }
+
+    loadProfileGrid();
+</script>
 </body>
 </html>
