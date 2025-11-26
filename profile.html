@@ -35,18 +35,37 @@
         header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 15px;
+            padding: 10px 15px;
             position: sticky;
             top: 0;
             z-index: 1000;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 50px;
+            height: 60px;
         }
 
-        .logo { font-weight: 700; font-size: 1.2rem; color: var(--text-color); }
-        .logo span { color: var(--primary-color); }
+        /* Updated Logo Style: Bubble with Blue Outline */
+        .logo { 
+            font-family: 'Inter', sans-serif; /* Reverted to original font */
+            font-weight: 800;
+            font-size: 1.8rem; /* Kept size 1.8rem */
+            color: var(--text-color); /* Original Black text */
+            
+            /* The Blue Bubble Wrapper */
+            border: 3px solid var(--primary-color); /* Blue wraps around */
+            border-radius: 50px; /* Bubble shape */
+            padding: 5px 25px;
+            background-color: #fff;
+            
+            cursor: pointer;
+            display: inline-block;
+            box-shadow: 0 4px 6px rgba(0, 191, 255, 0.1);
+        }
+        
+        .logo span { 
+            color: var(--primary-color); /* Original Blue '&' */
+        }
 
         .header-icons {
             position: absolute;
@@ -237,6 +256,7 @@
     <div id="profile-view">
         <!-- Header -->
         <header>
+            <!-- Logo with Blue Bubble Border -->
             <div class="logo">Art<span>&</span>Share</div>
             <i class="fas fa-cog header-icons"></i>
         </header>
@@ -246,7 +266,6 @@
             <div class="cover-photo"></div>
             
             <div class="profile-pic-wrapper">
-                <!-- Added ID -->
                 <img src="https://placehold.co/100x100/333/fff?text=Me" class="profile-pic-lg" id="view-profile-pic">
             </div>
             
@@ -322,11 +341,8 @@
 
         <div class="edit-content">
             <div class="photo-section">
-                <!-- Added ID -->
                 <img src="https://placehold.co/100x100/333/fff?text=Me" class="profile-pic-lg" id="edit-profile-pic" style="width: 100px; height: 100px;">
-                <!-- File Input (Hidden) -->
                 <input type="file" id="profile-upload" accept="image/*" style="display: none;">
-                <!-- Trigger Button -->
                 <div class="change-photo-btn" onclick="document.getElementById('profile-upload').click()">Change Profile Photo</div>
             </div>
 
@@ -431,10 +447,8 @@
         // --- NAVIGATION FUNCTIONS ---
 
         function showEditView() {
-            // Pre-populate inputs
             editNameInput.value = displayName.textContent;
             editBioInput.value = displayBio.textContent;
-            // Ensure edit view image matches current view image if no temp change
             if (!tempProfilePicData) {
                 editProfilePic.src = viewProfilePic.src;
             }
@@ -448,8 +462,6 @@
             editView.classList.add('hidden');
             profileView.classList.remove('hidden');
             window.scrollTo(0, 0); 
-            // Reset temp data if canceled (optional, but good UX)
-            // For now, we keep it simple.
         }
 
         function showPersonalInfo() {
@@ -467,22 +479,18 @@
         // --- DATA SAVING (LocalStorage) ---
 
         function saveProfileChanges() {
-            // Update Text UI
             displayName.textContent = editNameInput.value;
             displayBio.textContent = editBioInput.value;
 
-            // Update Image UI if changed
             if (tempProfilePicData) {
                 viewProfilePic.src = tempProfilePicData;
             }
 
-            // Save to Local Storage
             const profileData = {
                 name: editNameInput.value,
                 bio: editBioInput.value,
                 username: editUsernameInput.value,
                 website: editWebsiteInput.value,
-                // Use new image if exists, otherwise keep existing src
                 profilePic: tempProfilePicData || viewProfilePic.src
             };
             localStorage.setItem('userProfile', JSON.stringify(profileData));
@@ -498,10 +506,9 @@
                 if(profile.name) displayName.textContent = profile.name;
                 if(profile.bio) displayBio.textContent = profile.bio;
                 
-                // Load saved image
                 if(profile.profilePic) {
                     viewProfilePic.src = profile.profilePic;
-                    editProfilePic.src = profile.profilePic; // Also update edit view
+                    editProfilePic.src = profile.profilePic;
                 }
 
                 if(profile.name) editNameInput.value = profile.name;
