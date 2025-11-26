@@ -7,13 +7,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     
-    <script>
-        // Protect Page
-        if (localStorage.getItem('isLoggedIn') !== 'true') {
-            window.location.href = 'login.html';
-        }
-    </script>
-
     <style>
         /* --- Root Variables --- */
         :root {
@@ -127,7 +120,7 @@
         .upload-box { 
             border: 2px dashed #ccc; 
             border-radius: 12px; 
-            height: 300px; /* Slightly taller for preview */
+            height: 300px; 
             display: flex; 
             flex-direction: column; 
             align-items: center; 
@@ -141,25 +134,101 @@
             position: relative;
         }
 
-        /* Image Preview Style */
         .preview-image {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Make it look like Instagram crop */
-            display: none; /* Hidden by default */
+            object-fit: cover; 
+            display: none; 
         }
         
-        /* Hide default instructions when image is loaded */
         .upload-box.has-image .upload-instructions { display: none; }
         .upload-box.has-image .preview-image { display: block; }
         
         .caption-input { 
             width: 100%; padding: 15px; border: 1px solid var(--border-color); 
-            border-radius: 8px; margin-bottom: 20px; font-family: inherit; 
+            border-radius: 8px; margin-bottom: 15px; font-family: inherit; 
             resize: none; box-sizing: border-box; background-color: var(--card-bg);
             color: var(--text-color); outline: none;
         }
         .caption-input:focus { border-color: var(--primary-color); }
+
+        /* --- TOGGLE SWITCH STYLES --- */
+        .sale-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 0 5px;
+            box-sizing: border-box;
+        }
+        
+        .sale-label { font-weight: 600; font-size: 0.95rem; }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 26px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider { background-color: var(--primary-color); }
+        input:checked + .slider:before { transform: translateX(24px); }
+
+        .price-input-container {
+            width: 100%;
+            display: none; /* Hidden by default */
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .price-input-container.show { display: block; animation: fadeIn 0.2s ease; }
+
+        .price-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--subtle-text);
+        }
+
+        .price-input {
+            width: 100%;
+            padding: 15px 15px 15px 35px; /* Space for icon */
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            outline: none;
+        }
+        .price-input:focus { border-color: var(--primary-color); }
+
 
         .share-btn { 
             background: var(--primary-color); color: white; border: none; 
@@ -182,48 +251,62 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo">Art<span class="ampersand">&</span>Share</div>
-        <div class="header-actions">
-            <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-            <div class="dropdown-menu" id="createDropdown">
-                <!-- Same Menu Items -->
-                <a href="#" class="dropdown-item" id="darkModeToggle"><i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span></a>
-                <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
-                <a href="#" class="dropdown-item" style="color: #ff5722;" onclick="logout()"><i class="fas fa-sign-out-alt" style="color: #ff5722;"></i> Log Out</a>
+    <!-- Wrapper to control visibility -->
+    <div id="main-content">
+        <header>
+            <div class="logo">Art<span class="ampersand">&</span>Share</div>
+            <div class="header-actions">
+                <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+                <div class="dropdown-menu" id="createDropdown">
+                    <a href="#" class="dropdown-item" id="darkModeToggle"><i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span></a>
+                    <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
+                    <a href="#" class="dropdown-item" style="color: #ff5722;" onclick="logout()"><i class="fas fa-sign-out-alt" style="color: #ff5722;"></i> Log Out</a>
+                </div>
             </div>
-        </div>
-    </header>
+        </header>
 
-    <div class="sub-header">New Post</div>
+        <div class="sub-header">New Post</div>
 
-    <div class="create-container">
-        <!-- Hidden File Input -->
-        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <div class="create-container">
+            <!-- Hidden File Input -->
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
 
-        <!-- Clickable Box -->
-        <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+            <!-- Clickable Box -->
+            <div class="upload-box" id="uploadBox" onclick="document.getElementById('fileInput').click()">
+                <div class="upload-instructions">
+                    <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
+                    <p>Tap here to select art from device</p>
+                </div>
+                <img id="imagePreview" class="preview-image" src="#" alt="Preview">
+            </div>
+
+            <textarea class="caption-input" id="captionInput" rows="3" placeholder="Write a caption..."></textarea>
             
-            <!-- Default View -->
-            <div class="upload-instructions">
-                <i class="fas fa-cloud-upload-alt" style="font-size: 3rem; margin-bottom: 10px;"></i>
-                <p>Tap here to select art from device</p>
+            <!-- Sell Option Toggle -->
+            <div class="sale-option">
+                <span class="sale-label">List for Sale?</span>
+                <label class="switch">
+                    <input type="checkbox" id="saleToggle">
+                    <span class="slider"></span>
+                </label>
             </div>
 
-            <!-- Preview View -->
-            <img id="imagePreview" class="preview-image" src="#" alt="Preview">
+            <!-- Price Input (Hidden by default) -->
+            <div class="price-input-container" id="priceContainer">
+                <i class="fas fa-dollar-sign price-icon"></i>
+                <input type="number" class="price-input" id="priceInput" placeholder="Price (e.g. 50)">
+            </div>
+
+            <button class="share-btn" onclick="publishPost()">Post Art</button>
         </div>
 
-        <textarea class="caption-input" id="captionInput" rows="3" placeholder="Write a caption..."></textarea>
-        <button class="share-btn" onclick="publishPost()">Post Art</button>
+        <footer>
+            <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
+            <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
+            <a href="create.html" class="nav-item active"><i class="fas fa-plus-square"></i><span>Create</span></a>
+            <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+        </footer>
     </div>
-
-    <footer>
-        <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
-        <a href="create.html" class="nav-item active"><i class="fas fa-plus-square"></i><span>Create</span></a>
-        <a href="profile.html" class="nav-item"><i class="fas fa-user-circle"></i><span>Profile</span></a>
-    </footer>
 
     <script>
         // --- Variables ---
@@ -231,58 +314,85 @@
         const uploadBox = document.getElementById('uploadBox');
         const imagePreview = document.getElementById('imagePreview');
         const captionInput = document.getElementById('captionInput');
+        const saleToggle = document.getElementById('saleToggle');
+        const priceContainer = document.getElementById('priceContainer');
+        const priceInput = document.getElementById('priceInput');
         let currentImageData = null;
 
         // --- 1. Handle File Selection ---
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    currentImageData = event.target.result; // Base64 string
-                    imagePreview.src = currentImageData;
-                    uploadBox.classList.add('has-image'); // Switches CSS to show image
+        if (fileInput) {
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        currentImageData = event.target.result;
+                        imagePreview.src = currentImageData;
+                        uploadBox.classList.add('has-image'); 
+                    }
+                    reader.readAsDataURL(file);
                 }
-                reader.readAsDataURL(file);
+            });
+        }
+
+        // --- 2. Handle Sale Toggle ---
+        saleToggle.addEventListener('change', function() {
+            if(this.checked) {
+                priceContainer.classList.add('show');
+            } else {
+                priceContainer.classList.remove('show');
             }
         });
 
-        // --- 2. Handle Publishing ---
+        // --- 3. Handle Publishing ---
         function publishPost() {
             if (!currentImageData) {
                 alert("Please select an image first.");
                 return;
             }
 
+            const isForSale = saleToggle.checked;
+            const priceValue = priceInput.value;
+
+            if (isForSale && !priceValue) {
+                alert("Please enter a price.");
+                return;
+            }
+
             // Create Post Object
             const newPost = {
-                id: Date.now(), // Unique ID based on time
+                id: Date.now(),
                 image: currentImageData,
                 caption: captionInput.value,
-                username: localStorage.getItem('username') || "My Art Gallery", // Use saved name or default
-                userAvatar: "https://placehold.co/40x40/00bfff/ffffff?text=Me", // Default avatar
-                timestamp: new Date().toLocaleDateString()
+                username: localStorage.getItem('username') || "My Art Gallery",
+                userAvatar: "https://placehold.co/40x40/00bfff/ffffff?text=Me",
+                timestamp: new Date().toLocaleDateString(),
+                forSale: isForSale,
+                price: priceValue
             };
 
-            // Get existing posts or initialize empty array
+            // Get existing posts
             let posts = JSON.parse(localStorage.getItem('artSharePosts')) || [];
             
-            // Add new post to the beginning
+            // Add new post to beginning
             posts.unshift(newPost);
 
-            // Save back to Local Storage
+            // Save to Local Storage
             localStorage.setItem('artSharePosts', JSON.stringify(posts));
 
-            // Update User's Post Count (optional quick fix for profile stats)
-            let postCount = parseInt(localStorage.getItem('postCount') || '1'); // Defaulting to 1 (the static one)
+            // Update User's Post Count
+            let postCount = parseInt(localStorage.getItem('postCount') || '1');
             localStorage.setItem('postCount', postCount + 1);
 
             // Redirect Home
             window.location.href = 'index.html';
         }
 
-        // --- Menu & Dark Mode Logic (Standard) ---
-        function toggleMenu() { document.getElementById('createDropdown').classList.toggle('show'); }
+        // --- Menu & Dark Mode Logic ---
+        function toggleMenu() { 
+            const dropdown = document.getElementById('createDropdown');
+            if(dropdown) dropdown.classList.toggle('show'); 
+        }
         
         window.onclick = function(event) {
             if (!event.target.closest('.header-actions')) {
@@ -298,14 +408,24 @@
             window.location.href = 'login.html';
         }
 
-        // Dark Mode Setup
         const darkModeToggle = document.getElementById('darkModeToggle');
         const body = document.body;
         const icon = document.getElementById('darkModeIcon');
         const text = document.getElementById('darkModeText');
 
-        const enableDarkMode = () => { body.classList.add('dark-mode'); if(icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } if(text) text.textContent="Light Mode"; localStorage.setItem('darkMode', 'enabled'); };
-        const disableDarkMode = () => { body.classList.remove('dark-mode'); if(icon) { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } if(text) text.textContent="Dark Mode"; localStorage.setItem('darkMode', 'disabled'); };
+        const enableDarkMode = () => { 
+            body.classList.add('dark-mode'); 
+            if(icon) { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); } 
+            if(text) text.textContent="Light Mode"; 
+            localStorage.setItem('darkMode', 'enabled'); 
+        };
+        
+        const disableDarkMode = () => { 
+            body.classList.remove('dark-mode'); 
+            if(icon) { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); } 
+            if(text) text.textContent="Dark Mode"; 
+            localStorage.setItem('darkMode', 'disabled'); 
+        };
 
         if (localStorage.getItem('darkMode') === 'enabled') enableDarkMode();
 
