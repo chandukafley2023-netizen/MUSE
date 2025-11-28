@@ -15,7 +15,7 @@
             --text-color: #222;
             --subtle-text: #666;
             --border-color: #e5e7eb;
-            --hover-bg: #f5f5f5;
+            --hover-bg: #e0e0e0; /* Slightly darker for visible empty spaces */
             --footer-height: 60px;
             --header-height: 60px;
             --max-width: 600px;
@@ -27,7 +27,7 @@
             --text-color: #e0e0e0;
             --subtle-text: #a0a0a0;
             --border-color: #333333;
-            --hover-bg: #1e1e1e;
+            --hover-bg: #2a2a2a;
         }
 
         body {
@@ -35,7 +35,6 @@
             background-color: var(--secondary-color);
             font-family: 'Inter', sans-serif;
             color: var(--text-color);
-            /* Padding bottom must accommodate footer */
             padding-bottom: calc(var(--footer-height) + 20px); 
             overflow-x: hidden;
             transition: background-color 0.3s ease, color 0.3s ease;
@@ -127,7 +126,7 @@
             width: 100px;
             height: 100px;
             border-radius: 50%;
-            border: 4px solid var(--card-bg); /* Thicker border matches background */
+            border: 4px solid var(--card-bg);
             margin: -50px auto 10px;
             position: relative;
             z-index: 10;
@@ -172,15 +171,14 @@
             margin-top: 10px;
         }
         .tab-item {
-            flex: 1;
+            flex: 1; 
             text-align: center;
             padding: 15px 0;
             font-weight: 600;
-            color: var(--subtle-text);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
+            color: var(--primary-color);
+            cursor: default;
+            border-bottom: 2px solid var(--primary-color);
         }
-        .tab-item.active { color: var(--primary-color); border-bottom-color: var(--primary-color); }
 
         .explore-grid {
             display: grid;
@@ -190,11 +188,11 @@
         }
         .explore-item {
             aspect-ratio: 1/1;
-            background: var(--hover-bg);
+            background: var(--hover-bg); /* Gray background to show space */
             position: relative;
             cursor: pointer;
         }
-        .explore-item img { width: 100%; height: 100%; object-fit: cover; }
+        /* No img styling needed since we aren't using images in grid */
 
         /* --- EDIT VIEW --- */
         .edit-container {
@@ -273,7 +271,7 @@
                         <i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span>
                     </div>
                     <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
-                    <div class="dropdown-item" style="color: #ff5722;" onclick="alert('Logged out (Demo)')">
+                    <div class="dropdown-item" style="color: #ff5722;" onclick="localStorage.removeItem('isLoggedIn'); window.location.href = 'login.html';">
                         <i class="fas fa-sign-out-alt" style="color: #ff5722;"></i> Log Out
                     </div>
                 </div>
@@ -289,7 +287,7 @@
             <div class="profile-bio-text" id="display-bio">Creating digital dreams 🎨 | Based in Bhutan 🇧🇹</div>
             
             <div class="profile-stats">
-                <div class="stat-box"><span class="stat-num">1</span><span class="stat-label">Posts</span></div>
+                <div class="stat-box"><span class="stat-num" id="post-count">6</span><span class="stat-label">Posts</span></div>
                 <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Followers</span></div>
                 <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Following</span></div>
             </div>
@@ -302,16 +300,16 @@
         <div class="content-area">
             <div class="profile-tabs">
                 <div class="tab-item active"><i class="fas fa-th"></i> Posts</div>
-                <div class="tab-item"><i class="far fa-bookmark"></i> Saved</div>
-                <div class="tab-item"><i class="far fa-id-badge"></i> Tagged</div>
             </div>
-            <div class="explore-grid">
-                <div class="explore-item"><img src="https://placehold.co/300x300/111/fff?text=Art+1"></div>
-                <div class="explore-item"><img src="https://placehold.co/300x300/222/fff?text=Art+2"></div>
-                <div class="explore-item"><img src="https://placehold.co/300x300/333/fff?text=Art+3"></div>
-                <div class="explore-item"><img src="https://placehold.co/300x300/444/fff?text=Art+4"></div>
-                <div class="explore-item"><img src="https://placehold.co/300x300/555/fff?text=Art+5"></div>
-                <div class="explore-item"><img src="https://placehold.co/300x300/666/fff?text=Art+6"></div>
+            <div class="explore-grid" id="profile-grid">
+                <!-- User posts will be injected here via JS (as empty blocks) -->
+                <!-- Default Mock Spaces (No Images) -->
+                <div class="explore-item"></div>
+                <div class="explore-item"></div>
+                <div class="explore-item"></div>
+                <div class="explore-item"></div>
+                <div class="explore-item"></div>
+                <div class="explore-item"></div>
             </div>
         </div>
 
@@ -465,16 +463,14 @@
             });
         }
 
-        // --- File Upload Logic (With Safety) ---
+        // --- File Upload Logic ---
         inputs.file.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Limit file size to 2MB to prevent LocalStorage crash
                 if (file.size > 2 * 1024 * 1024) {
                     alert("Image is too large! Please choose an image under 2MB.");
                     return;
                 }
-
                 const reader = new FileReader();
                 reader.onload = function(event) {
                     inputs.pic.src = event.target.result;
@@ -486,16 +482,13 @@
 
         // --- Navigation Functions ---
         function showEditView() {
-            // Populate inputs with current display data
             inputs.name.value = display.name.textContent;
             inputs.bio.value = display.bio.textContent;
             
-            // Handle image logic
             const currentSrc = display.pic.getAttribute('src');
             inputs.pic.src = currentSrc;
-            tempProfilePicData = null; // Reset temp data on fresh open
+            tempProfilePicData = null;
 
-            // Load saved extra fields from storage if they exist
             const savedData = localStorage.getItem('userProfile');
             if (savedData) {
                 const profile = JSON.parse(savedData);
@@ -529,7 +522,6 @@
         // --- Data Persistence ---
         function saveProfileChanges() {
             try {
-                // Update UI immediately
                 display.name.textContent = inputs.name.value;
                 display.bio.textContent = inputs.bio.value;
 
@@ -544,20 +536,12 @@
                     profilePic: finalPic
                 };
 
-                // Try to save to LocalStorage
                 localStorage.setItem('userProfile', JSON.stringify(profileData));
-                alert("Profile Saved!");
                 hideEditView();
 
             } catch (e) {
                 console.error(e);
-                if (e.name === 'QuotaExceededError') {
-                    alert("Storage full! The image might be too large to save permanently in this demo.");
-                    // Still update the UI for this session
-                    hideEditView();
-                } else {
-                    alert("An error occurred while saving.");
-                }
+                alert("Error saving profile (likely storage full for images).");
             }
         }
 
@@ -566,15 +550,33 @@
                 const savedData = localStorage.getItem('userProfile');
                 if (savedData) {
                     const profile = JSON.parse(savedData);
-                    
                     if(profile.name) display.name.textContent = profile.name;
                     if(profile.bio) display.bio.textContent = profile.bio;
                     if(profile.profilePic) display.pic.src = profile.profilePic;
                 }
+                
+                // --- Load User Posts ---
+                const posts = JSON.parse(localStorage.getItem('artSharePosts')) || [];
+                const gridContainer = document.getElementById('profile-grid');
+                const postCountDisplay = document.getElementById('post-count');
+                
+                if (posts.length > 0) {
+                    // Update stats (Default 6 mock posts + new posts)
+                    postCountDisplay.textContent = 6 + posts.length;
+                    
+                    posts.forEach(post => {
+                        const div = document.createElement('div');
+                        div.className = 'explore-item';
+                        // Empty div as requested
+                        // Insert at the beginning
+                        gridContainer.insertBefore(div, gridContainer.firstChild);
+                    });
+                } else {
+                    postCountDisplay.textContent = 6; // Default mocks
+                }
+
             } catch (e) {
-                console.error("Error loading profile data", e);
-                // If data is corrupt, clear it
-                localStorage.removeItem('userProfile');
+                console.error("Error loading data", e);
             }
         }
 
