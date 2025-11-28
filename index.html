@@ -4,7 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Art&Share - Home</title>
-    <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -19,8 +18,8 @@
             --text-color: #222;
             --subtle-text: #666;
             --border-color: #e5e7eb;
-            --card-bg: #ffffff;       /* New variable for card/menu backgrounds */
-            --hover-bg: #f5f5f5;      /* New variable for hover states */
+            --card-bg: #ffffff;        /* New variable for card/menu backgrounds */
+            --hover-bg: #f5f5f5;       /* New variable for hover states */
             --font-family: 'Inter', Arial, sans-serif;
             --max-width: 600px; /* Standard feed width */
         }
@@ -200,10 +199,33 @@
             background-color: var(--hover-bg); /* Adapts to dark mode */
         }
 
-        .post-image {
+        /* --- NEW PLACEHOLDER STYLE --- */
+        .post-placeholder {
             width: 100%;
-            height: auto;
-            display: block;
+            min-height: 300px; /* Height of the canvas area */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--hover-bg);
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            color: var(--subtle-text);
+            font-weight: 500;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Optional dashed border inside to look like a canvas */
+        .post-placeholder-inner {
+            border: 2px dashed var(--border-color);
+            width: 90%;
+            height: 200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
         }
         
         .post-actions {
@@ -317,18 +339,14 @@
 </head>
 <body>
     
-    <!-- Top Bar / Header -->
     <header>
-        <!-- Updated Logo Text matching Profile Page style -->
         <div class="logo">Art<span class="ampersand">&</span>Share</div>
         
-        <!-- Hamburger Menu -->
         <div class="header-actions">
             <div class="menu-trigger" onclick="toggleMenu()">
                 <i class="fas fa-bars"></i>
             </div>
             
-            <!-- Dropdown Content -->
             <div class="dropdown-menu" id="homeDropdown">
                 <a href="#" class="dropdown-item">
                     <i class="fas fa-cog"></i> Settings
@@ -340,7 +358,6 @@
                     <i class="fas fa-chart-bar"></i> Your Activity
                 </a>
                 
-                <!-- Dark Mode Toggle Item -->
                 <a href="#" class="dropdown-item" id="darkModeToggle">
                     <i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span>
                 </a>
@@ -355,7 +372,6 @@
 
     <main>
         
-        <!-- Mock Post 1 -->
         <div class="art-post">
             <div class="post-header">
                 <div class="user-info">
@@ -366,8 +382,11 @@
             </div>
             
             <div class="post-image-container">
-                <img class="post-image" src="https://naturaldharma.org/wp-content/uploads/2024/07/Chenrezig.jpeg" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/bbf/222?text=Bhutan+Temple+Art'" alt="Bhutan Temple Art">
+                <div class="post-placeholder">
+                    <div class="post-placeholder-inner">
+                        
+                    </div>
+                </div>
             </div>
 
             <div class="post-actions">
@@ -386,7 +405,6 @@
             <div class="view-comments">View all comments</div>
         </div>
         
-        <!-- Mock Post 2 -->
         <div class="art-post">
             <div class="post-header">
                 <div class="user-info">
@@ -397,8 +415,11 @@
             </div>
             
             <div class="post-image-container">
-                <img class="post-image" src="https://lobopopart.com.br/wp-content/uploads/2020/06/Cavalos-vermelho-e-azul-de-Franz-Marc-768x466.jpg" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/f88/222?text=Abstract+Canvas+No.5'" alt="Abstract Canvas">
+                <div class="post-placeholder">
+                    <div class="post-placeholder-inner">
+                        
+                    </div>
+                </div>
             </div>
 
             <div class="post-actions">
@@ -417,7 +438,6 @@
             <div class="view-comments">View all comments</div>
         </div>
         
-        <!-- Mock Post 3 -->
         <div class="art-post">
             <div class="post-header">
                 <div class="user-info">
@@ -428,8 +448,14 @@
             </div>
             
             <div class="post-image-container">
-                <img class="post-image" src="https://artsshala.com/cdn/shop/files/01.jpg?v=1714541319.jpg" 
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x600/ccc/222?text=Charcoal+Portrait'" alt="Charcoal Portrait">
+                <div class="post-placeholder">
+                    <div class="post-placeholder-inner">
+                        
+
+[Image of Charcoal Portrait Study]
+
+                    </div>
+                </div>
             </div>
 
             <div class="post-actions">
