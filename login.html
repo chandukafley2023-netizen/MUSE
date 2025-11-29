@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Art&Share - Login</title>
+    <title>MUSE - Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     
@@ -27,7 +27,7 @@
 </head>
 <body>
 
-    <div class="logo">Art<span>&</span>Share</div>
+    <div class="logo">MU<span>S</span>E</div>
 
     <div class="auth-card">
         <!-- LOGIN FORM -->
@@ -55,12 +55,21 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // Initialize Firebase
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
+        // --- UPDATED WITH YOUR REAL KEYS ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBxqgmslZINTLdqF1LfC46eTMQMFyYFRr4",
+            authDomain: "artandshare-175b3.firebaseapp.com",
+            projectId: "artandshare-175b3",
+            storageBucket: "artandshare-175b3.firebasestorage.app",
+            messagingSenderId: "369391496856",
+            appId: "1:369391496856:web:da89ff9f8aaef36907aaed",
+            measurementId: "G-6PNY1VTYFX"
+        };
+
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // Check if already logged in
+        // Check if already logged in (redirect to home)
         onAuthStateChanged(auth, (user) => {
             if (user) window.location.href = 'index.html';
         });
@@ -99,6 +108,11 @@
                 errorDiv.style.display = 'block';
             }
         });
+
+        // Dark Mode Sync
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            document.body.classList.add('dark-mode');
+        }
     </script>
 </body>
 </html>
