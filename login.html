@@ -51,7 +51,7 @@
         
         .hidden { display: none; }
         .error-msg { color: #ff5722; font-size: 0.85rem; margin-top: 10px; display: none; }
-        .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 10px; display: none; }
+        .success-msg { color: #4caf50; font-size: 0.85rem; margin-top: 10px; display: none; line-height: 1.4; }
     </style>
 </head>
 <body>
@@ -94,7 +94,11 @@
             <div class="input-group"><input type="email" id="reset-email" class="input-field" placeholder="Email Address"></div>
             <button class="btn-primary" id="btn-reset">Send Reset Link</button>
             <div class="error-msg" id="reset-error"></div>
-            <div class="success-msg" id="reset-success">Check your email for the link!</div>
+            <div class="success-msg" id="reset-success">
+                Link sent! Check your email (and Spam folder).<br>
+                Click the link in the email to reset your password.<br>
+                You do not need to paste anything here.
+            </div>
             <!-- ID added here, onclick removed -->
             <div class="auth-switch"><span class="link" id="link-back">Back to Log In</span></div>
         </div>
@@ -190,6 +194,8 @@
                 await sendPasswordResetEmail(auth, email);
                 successDiv.style.display = 'block';
             } catch (error) {
+                // Note: Firebase may return success even if email doesn't exist (security feature)
+                // or throw an error if the email is malformed.
                 errorDiv.textContent = error.message.replace('Firebase: ', '');
                 errorDiv.style.display = 'block';
             }
