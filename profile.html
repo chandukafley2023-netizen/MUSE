@@ -194,7 +194,7 @@
         .btn:active { transform: scale(0.98); }
         .btn-primary { background-color: var(--primary-color); color: white; }
 
-        /* --- GRID --- */
+        /* --- GRID & TABS --- */
         .content-area { max-width: var(--max-width); margin: 0 auto; }
 
         .profile-tabs {
@@ -209,8 +209,13 @@
             text-align: center;
             padding: 15px 0;
             font-weight: 600;
+            color: var(--subtle-text);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: color 0.3s, border-color 0.3s;
+        }
+        .tab-item.active {
             color: var(--primary-color);
-            cursor: default;
             border-bottom: 2px solid var(--primary-color);
         }
 
@@ -222,9 +227,10 @@
         }
         .explore-item {
             aspect-ratio: 1/1;
-            background: var(--hover-bg); /* Gray background to show space */
+            background: var(--hover-bg);
             position: relative;
             cursor: pointer;
+            overflow: hidden;
         }
         .explore-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
@@ -310,7 +316,6 @@
                     </div>
                     <div class="dropdown-menu" id="profileDropdown">
                         <div class="dropdown-item"><i class="fas fa-cog"></i> Settings</div>
-                        <div class="dropdown-item"><i class="far fa-bookmark"></i> Saved</div>
                         <div class="dropdown-item"><i class="fas fa-chart-bar"></i> Your Activity</div>
                         <div class="dropdown-item" id="darkModeToggle">
                             <i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span>
@@ -344,7 +349,8 @@
 
             <div class="content-area">
                 <div class="profile-tabs">
-                    <div class="tab-item active"><i class="fas fa-th"></i> Posts</div>
+                    <div class="tab-item active" onclick="switchTab('posts')"><i class="fas fa-th"></i> Posts</div>
+                    <div class="tab-item" onclick="switchTab('saved')"><i class="far fa-bookmark"></i> Saved</div>
                 </div>
                 <div class="explore-grid" id="profile-grid">
                     <!-- User posts will be injected here via JS -->
@@ -353,7 +359,7 @@
 
             <footer>
                 <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-                <a href="Explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
+                <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
                 <a href="create.html" class="nav-item"><i class="fas fa-plus-square"></i><span>Create</span></a>
                 <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>Profile</span></a>
             </footer>
@@ -376,22 +382,22 @@
 
                 <div class="form-group">
                     <label class="label">Name</label>
-                    <input type="text" class="input-field" id="edit-name" placeholder="Your Name">
+                    <input type="text" class="input-field" id="edit-name">
                 </div>
 
                 <div class="form-group">
                     <label class="label">Username</label>
-                    <input type="text" class="input-field" id="edit-username" placeholder="@username">
+                    <input type="text" class="input-field" id="edit-username">
                 </div>
 
                 <div class="form-group">
                     <label class="label">Bio</label>
-                    <textarea class="input-field" id="edit-bio" rows="3" style="resize: none;" placeholder="Tell us about yourself..."></textarea>
+                    <textarea class="input-field" id="edit-bio" rows="3" style="resize: none;"></textarea>
                 </div>
 
                 <div class="form-group">
                     <label class="label">Website</label>
-                    <input type="text" class="input-field" id="edit-website" placeholder="www.yoursite.com">
+                    <input type="text" class="input-field" id="edit-website">
                 </div>
                 
                 <div class="form-group">
@@ -490,12 +496,10 @@
             const userSnap = await getDoc(userRef);
 
             if (userSnap.exists()) {
-                // Profile exists -> Load data
                 const data = userSnap.data();
                 updateDisplay(data);
                 updateInputs(data);
             } else {
-                // Profile DOES NOT exist -> Force Edit View
                 console.log("New user detected. Forcing profile setup.");
                 const basicData = {
                     username: user.displayName || user.email.split('@')[0],
@@ -506,7 +510,7 @@
                 alert("Welcome! Please set up your profile to continue.");
             }
 
-            // Always load posts
+            // Always load posts initially
             loadUserPosts(user.uid);
             document.getElementById('info-email').textContent = user.email;
         }
@@ -541,6 +545,20 @@
             if (data.profilePic) inputs.pic.src = data.profilePic;
         }
 
+        // --- Switch Tabs ---
+        window.switchTab = function(tab) {
+            const tabs = document.querySelectorAll('.tab-item');
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if(tab === 'posts') {
+                tabs[0].classList.add('active');
+                loadUserPosts(currentUser.uid);
+            } else {
+                tabs[1].classList.add('active');
+                loadSavedPosts(currentUser.uid);
+            }
+        }
+
         // --- Load Posts ---
         async function loadUserPosts(userId) {
             const grid = document.getElementById('profile-grid');
@@ -573,8 +591,55 @@
             }
         }
 
+        // --- Load Saved Posts ---
+        async function loadSavedPosts(userId) {
+            const grid = document.getElementById('profile-grid');
+            grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">Loading saved...</div>';
+
+            try {
+                const savedSnap = await getDocs(collection(db, "users", userId, "saved_posts"));
+                
+                if (savedSnap.empty) {
+                    grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">No saved posts.</div>';
+                    return;
+                }
+
+                grid.innerHTML = ""; // Clear
+                
+                // Process each saved post
+                const promises = [];
+                savedSnap.forEach(docSnap => {
+                     const postId = docSnap.id;
+                     if(postId === 'static-first-post') {
+                         // Special handling for static post
+                         const div = document.createElement('div');
+                         div.className = 'explore-item';
+                         div.innerHTML = `<img src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg" alt="Saved Post">`;
+                         grid.appendChild(div);
+                     } else {
+                         // Fetch real post data
+                         promises.push(getDoc(doc(db, "posts", postId)));
+                     }
+                });
+
+                const postDocs = await Promise.all(promises);
+                postDocs.forEach(postSnap => {
+                    if(postSnap.exists()) {
+                        const post = postSnap.data();
+                        const div = document.createElement('div');
+                        div.className = 'explore-item';
+                        div.innerHTML = `<img src="${post.image}" alt="Saved Post">`;
+                        grid.appendChild(div);
+                    }
+                });
+
+            } catch(e) {
+                console.error(e);
+                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">Error loading saved.</div>';
+            }
+        }
+
         // --- Image Compression Helper ---
-        // Reduces image size before saving to DB to speed up profile updates
         function resizeImage(file, maxWidth, maxHeight, quality, callback) {
             const reader = new FileReader();
             reader.onload = function(event) {
@@ -600,8 +665,6 @@
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Convert to compressed base64 string
                     callback(canvas.toDataURL('image/jpeg', quality));
                 };
                 img.src = event.target.result;
@@ -629,7 +692,6 @@
                     email: currentUser.email 
                 };
 
-                // Write to 'users' collection
                 await setDoc(doc(db, "users", currentUser.uid), profileData, { merge: true });
                 
                 updateDisplay(profileData);
@@ -646,12 +708,15 @@
             }
         }
 
-        // --- File Upload Logic with Compression ---
+        // --- File Upload Logic ---
         if (inputs.file) {
             inputs.file.addEventListener('change', function(e) {
                 const file = e.target.files[0];
                 if (file) {
-                    // Compress to max 500x500px, 70% quality
+                    if (file.size > 2 * 1024 * 1024) { 
+                        alert("Image is too large! Please choose an image under 2MB.");
+                        return;
+                    }
                     resizeImage(file, 500, 500, 0.7, function(resizedDataUrl) {
                          inputs.pic.src = resizedDataUrl;
                          tempProfilePicData = resizedDataUrl;
@@ -696,7 +761,6 @@
             }
         }
         
-        // Dark Mode
         const darkModeToggle = document.getElementById('darkModeToggle');
         const darkModeIcon = document.getElementById('darkModeIcon');
         const darkModeText = document.getElementById('darkModeText');
