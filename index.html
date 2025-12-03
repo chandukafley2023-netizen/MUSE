@@ -7,7 +7,10 @@
     <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
-    <link rel="icon" type="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/Gemini_Generated_Image_pcaptlpcaptlpcap.png" href="/favicon.ico">
+    
+    <!-- Fixed Favicon Link -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/Gemini_Generated_Image_pcaptlpcaptlpcap.png">
+    
     <style>
         /* --- Root Variables and Reset --- */
         :root {
@@ -124,10 +127,7 @@
 
         .post-actions { display: flex; align-items: center; padding: 10px 15px 5px; }
         .post-actions i { font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--text-color); transition: transform 0.1s; }
-        
-        /* Like Button Styles */
         .post-actions i.fa-heart.liked { color: var(--highlight-color); animation: likeBounce 0.3s; }
-        
         .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid icon when saved */
         .post-actions i.last { margin-left: auto; margin-right: 0; }
 
@@ -185,16 +185,14 @@
                     <i class="fas fa-ellipsis-h post-options"></i>
                 </div>
                 <div class="post-image-container">
-                    <img class="post-image" src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg" alt="First Post" 
+                    <img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg" alt="First Post" 
                          onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not found</div></div>'">
                 </div>
                 <div class="post-actions">
-                    <!-- Updated Like Button to use toggleLike function -->
                     <i class="far fa-heart post-like-btn" onclick="toggleLike(this)"></i>
                     <i class="far fa-comment" onclick="checkAuth('comment')"></i>
                     <i class="far fa-bookmark last" onclick="toggleSave(this, 'static-first-post')"></i>
                 </div>
-                <!-- Updated Likes count to 0 initially -->
                 <span class="likes-count">0 likes</span>
                 <div class="post-caption"><span class="user-link">MUSE</span> Welcome to our new community of artists! 🎨✨ <span class="hashtags">#FirstPost #Art</span></div>
                 <div class="view-comments" onclick="checkAuth('view comments')">View comments</div>
@@ -498,6 +496,20 @@
             if(text) text.textContent = isDark ? "Light Mode" : "Dark Mode";
             
             localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
+        });
+
+        // Local Like Toggle Logic (Visual)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('post-like-btn')) {
+                if (!currentUser) return; // checkAuth handles redirect
+                if (e.target.classList.contains('fas')) {
+                    e.target.classList.remove('fas', 'liked');
+                    e.target.classList.add('far');
+                } else {
+                    e.target.classList.add('fas', 'liked');
+                    e.target.classList.remove('far');
+                }
+            }
         });
     </script>
 </body>
