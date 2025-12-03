@@ -360,7 +360,7 @@
 
             <footer>
                 <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-                <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
+                <a href="Explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
                 <a href="create.html" class="nav-item"><i class="fas fa-plus-square"></i><span>Create</span></a>
                 <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>Profile</span></a>
             </footer>
@@ -421,7 +421,7 @@
 
                 <div class="personal-info-row">
                     <div class="label">E-mail Address</div>
-                    <div style="font-weight: 500;" id="info-email">loading...</div>
+                    <div style="font-weight: 500;" id="info-email">example@2025mail.com</div>
                 </div>
 
                 <div class="personal-info-row">
@@ -431,12 +431,12 @@
 
                 <div class="personal-info-row">
                     <div class="label">Gender</div>
-                    <div style="font-weight: 500;">Male</div>
+                    <div style="font-weight: 500;"></div>
                 </div>
 
                 <div class="personal-info-row">
                     <div class="label">Birthday</div>
-                    <div style="font-weight: 500;">23 October 2009</div>
+                    <div style="font-weight: 500;">DD MM YYYY</div>
                 </div>
             </div>
         </div>
@@ -613,7 +613,7 @@
                      if(postId === 'static-first-post') {
                          const div = document.createElement('div');
                          div.className = 'explore-item';
-                         div.innerHTML = `<img src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg" alt="Saved Post">`;
+                         div.innerHTML = `<img src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg" alt="Saved Post">`;
                          grid.appendChild(div);
                      } else {
                          promises.push(getDoc(doc(db, "posts", postId)));
