@@ -19,16 +19,16 @@
             --text-color: #222;
             --subtle-text: #666;
             --border-color: #e5e7eb;
-            --card-bg: #ffffff;       
-            --hover-bg: #f5f5f5;      
+            --card-bg: #ffffff;       /* New variable for card/menu backgrounds */
+            --hover-bg: #f5f5f5;      /* New variable for hover states */
             --font-family: 'Inter', Arial, sans-serif;
-            --max-width: 600px;
+            --max-width: 600px; /* Standard feed width */
         }
 
-        /* --- Dark Mode --- */
+        /* --- Dark Mode Variables Override --- */
         body.dark-mode {
-            --secondary-color: #000000;
-            --card-bg: #121212;
+            --secondary-color: #000000;   /* Main Background */
+            --card-bg: #121212;           /* Headers, Footers, Cards */
             --text-color: #e0e0e0;
             --subtle-text: #a0a0a0;
             --border-color: #333333;
@@ -44,8 +44,8 @@
             line-height: 1.5;
             display: flex;
             flex-direction: column;
-            padding-bottom: 60px;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            padding-bottom: 60px; /* Space for fixed bottom nav */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
         }
 
         .hidden { display: none !important; }
@@ -82,6 +82,7 @@
         }
 
         .logo span.ampersand { color: var(--primary-color); font-weight: 900; margin: 0 1px; }
+        
         .header-actions { position: relative; }
         .menu-trigger { font-size: 1.3rem; color: var(--text-color); cursor: pointer; padding: 5px; }
 
@@ -97,9 +98,12 @@
         .dropdown-item:hover { background-color: var(--hover-bg); }
         .dropdown-item i { width: 25px; color: var(--subtle-text); font-size: 1.1rem; }
 
-        /* --- Post Card --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Main Content --- */
         main { flex-grow: 1; width: 100%; max-width: var(--max-width); margin: 0 auto; padding-top: 5px; }
 
+        /* --- Post Card --- */
         .art-post { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 10px; transition: background-color 0.3s ease; }
         .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; }
         .user-info { display: flex; align-items: center; }
@@ -108,26 +112,42 @@
         .post-options { color: var(--subtle-text); cursor: pointer; }
         
         .post-image-container { width: 100%; background-color: var(--hover-bg); }
-        .post-image { width: 100%; display: block; height: auto; object-fit: cover; }
+        
         .post-placeholder {
             width: 100%; min-height: 350px; display: flex; justify-content: center;
             align-items: center; background-color: var(--hover-bg);
+            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
             color: var(--subtle-text); font-weight: 500; font-style: italic;
+            text-align: center; padding: 20px; box-sizing: border-box;
         }
+        .post-placeholder-inner { border: 2px dashed var(--border-color); width: 80%; height: 200px; display: flex; justify-content: center; align-items: center; border-radius: 12px; opacity: 0.5; }
+
+        .post-image { width: 100%; display: block; height: auto; object-fit: cover; }
 
         .post-actions { display: flex; align-items: center; padding: 10px 15px 5px; }
         .post-actions i { font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--text-color); transition: transform 0.1s; }
-        
-        /* Interactive States */
         .post-actions i.fa-heart.liked { color: var(--highlight-color); animation: likeBounce 0.3s; }
-        .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid bookmark */
+        .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid icon when saved */
         .post-actions i.last { margin-left: auto; margin-right: 0; }
 
+        @keyframes likeBounce { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        
         .likes-count { font-size: 0.9rem; font-weight: 600; padding: 0 15px; margin-bottom: 5px; display: block; }
         .post-caption { padding: 0 15px; font-size: 0.9rem; margin-bottom: 5px; }
         .post-caption .user-link { font-weight: 600; margin-right: 5px; }
         .hashtags { color: var(--primary-color); }
         .view-comments { color: var(--subtle-text); font-size: 0.85rem; padding: 0 15px; cursor: pointer; margin-bottom: 10px; }
+        
+        /* --- Saved View Styles --- */
+        #saved-container { display: none; padding: 10px; }
+        .saved-header { padding: 15px; font-weight: 700; font-size: 1.2rem; text-align: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
+        
+        /* --- Footer --- */
+        footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); height: 60px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-around; align-items: center; transition: background-color 0.3s ease; }
+        .footer-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--subtle-text); width: 25%; }
+        .footer-nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .footer-nav-item span { font-size: 0.7rem; font-weight: 500; }
+        .footer-nav-item.active { color: var(--primary-color); }
 
         /* --- COMMENT MODAL STYLES --- */
         .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; animation: fadeIn 0.2s ease; }
@@ -145,20 +165,6 @@
         .modal-comment-text span { font-weight: 600; margin-right: 5px; }
         .modal-comment-text p { margin: 0; color: var(--text-color); }
         .modal-comment-time { font-size: 0.75rem; color: var(--subtle-text); margin-top: 2px; }
-
-        /* --- SAVED SECTION --- */
-        #saved-container { display: none; padding: 10px; }
-        .saved-header { padding: 15px; font-weight: 700; font-size: 1.2rem; text-align: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
-
-        /* --- Footer --- */
-        footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); height: 60px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-around; align-items: center; transition: background-color 0.3s ease; }
-        .footer-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--subtle-text); width: 25%; }
-        .footer-nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        .footer-nav-item span { font-size: 0.7rem; font-weight: 500; }
-        .footer-nav-item.active { color: var(--primary-color); }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes likeBounce { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -170,7 +176,11 @@
             
             <div class="dropdown-menu" id="homeDropdown">
                 <a href="#" class="dropdown-item" onclick="checkAuth('access settings')"><i class="fas fa-cog"></i> Settings</a>
+                
+                <!-- Saved Button -->
                 <a href="#" class="dropdown-item" onclick="showSavedSection()"><i class="far fa-bookmark"></i> Saved</a>
+                
+                <a href="#" class="dropdown-item"><i class="fas fa-chart-bar"></i> Your Activity</a>
                 <a href="#" class="dropdown-item" id="darkModeToggle"><i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span></a>
                 <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
                 <a href="#" class="dropdown-item" id="authLink" style="color: var(--primary-color);"><i class="fas fa-sign-in-alt"></i> Log In</a>
@@ -182,7 +192,7 @@
         <!-- FEED SECTION -->
         <div id="feed-container">
             <!-- Static First Post -->
-            <div class="art-post" id="static-post-container">
+            <div class="art-post">
                 <div class="post-header">
                     <div class="user-info">
                         <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=M" alt="MUSE">
@@ -191,7 +201,7 @@
                     <i class="fas fa-ellipsis-h post-options"></i>
                 </div>
                 <div class="post-image-container">
-                    <img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg" alt="First Post" 
+                    <img class="post-image" src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg" alt="First Post" 
                          onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not found</div></div>'">
                 </div>
                 <div class="post-actions">
@@ -201,10 +211,10 @@
                 </div>
                 <span class="likes-count">0 likes</span>
                 <div class="post-caption"><span class="user-link">MUSE</span> Welcome to our new community of artists! 🎨✨ <span class="hashtags">#FirstPost #Art</span></div>
-                <div class="view-comments" onclick="openComments('static-first-post', 'MUSE', 'Welcome to our new community of artists! 🎨✨', 'https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg')">View comments</div>
+                <div class="view-comments" onclick="openComments('static-first-post', 'MUSE', 'Welcome to our new community of artists! 🎨✨', 'https://placehold.co/40x40/00bfff/ffffff?text=M')">View comments</div>
             </div>
 
-            <!-- Dynamic Posts Area -->
+            <!-- Dynamic Posts -->
             <div id="dynamic-posts-area">
                 <div style="text-align: center; padding: 20px; color: #666;">Loading more posts...</div>
             </div>
@@ -233,7 +243,7 @@
 
     <footer>
         <a href="#" onclick="showFeed()" class="footer-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
-        <a href="Explore.html" class="footer-nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
+        <a href="explore.html" class="footer-nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
         <a href="create.html" class="footer-nav-item"><i class="fas fa-plus-square"></i><span>Create</span></a>
         <a href="profile.html" class="footer-nav-item"><i class="fas fa-user-circle"></i><span>Profile</span></a>
     </footer>
@@ -278,18 +288,34 @@
             } else {
                 authLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
                 authLink.style.color = '#00bfff';
-                authLink.onclick = (e) => { e.preventDefault(); safeRedirect('login.html'); };
+                authLink.onclick = (e) => { 
+                    e.preventDefault(); 
+                    safeRedirect('login.html');
+                };
                 authLink.href = '#';
             }
         }
 
+        // --- Safe Redirect Function ---
         function safeRedirect(url) {
-            try { window.location.href = url; } catch (e) { console.warn("Preview nav blocked"); alert("Please navigate to " + url); }
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn("Preview navigation blocked. In a real browser, this goes to: " + url);
+                alert("Navigation blocked in preview. Please deploy to test login redirection.");
+            }
         }
 
-        // --- ACTIONS ---
-        
-        // Toggle Like
+        // --- Global Auth Check ---
+        window.checkAuth = function(action) {
+            if (!currentUser) {
+                safeRedirect('login.html');
+            } else {
+                alert(`${action} action triggered!`);
+            }
+        }
+
+        // --- Toggle Like Logic ---
         window.toggleLike = async function(btn, postId) {
             if (!currentUser) { safeRedirect('login.html'); return; }
 
@@ -321,7 +347,7 @@
             }
         }
 
-        // Toggle Save
+        // --- Toggle Save Logic ---
         window.toggleSave = async function(btn, postId) {
             if (!currentUser) { safeRedirect('login.html'); return; }
             
@@ -383,9 +409,14 @@
             }
         }
 
-        // --- NAVIGATION ---
-        window.toggleMenu = function() { document.getElementById('homeDropdown').classList.toggle('show'); }
-        
+        document.getElementById('modalCommentInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') postCommentInModal();
+        });
+
+        // --- Toggle Menu ---
+        window.toggleMenu = function() {
+            document.getElementById('homeDropdown').classList.toggle('show');
+        }
         window.onclick = function(event) {
             if (!event.target.closest('.header-actions')) {
                 const dropdown = document.getElementById('homeDropdown');
@@ -394,6 +425,7 @@
             if (event.target.classList.contains('modal-backdrop')) closeCommentModal();
         }
 
+        // --- NAVIGATION LOGIC ---
         window.showSavedSection = async function() {
             if (!currentUser) { safeRedirect('login.html'); return; }
             document.getElementById('feed-container').style.display = 'none';
@@ -429,7 +461,7 @@
                                 <div class="post-header"><div class="username">MUSE</div>
                                 <i class="fas fa-bookmark post-options" style="color:black;" onclick="toggleSave(this, '${postId}'); this.closest('.art-post').remove()"></i>
                                 </div>
-                                <div class="post-image-container"><img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg"></div>
+                                <div class="post-image-container"><img class="post-image" src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg"></div>
                                 <div class="post-caption">Saved from Home</div>
                                 <div class="view-comments" onclick="openComments('${postId}', 'MUSE', 'Welcome...', 'https://placehold.co/40x40/00bfff/ffffff?text=M')">View comments</div>
                             </div>`;
@@ -452,8 +484,12 @@
                                     </div>
                                     <i class="fas fa-bookmark post-options" style="color:black;" onclick="toggleSave(this, '${postId}'); this.closest('.art-post').remove()"></i>
                                 </div>
-                                <div class="post-image-container"><img class="post-image" src="${post.image}" alt="Art"></div>
-                                <div class="post-caption"><span class="user-link">${post.username}</span> ${post.caption}</div>
+                                <div class="post-image-container">
+                                    <img class="post-image" src="${post.image}" alt="Art">
+                                </div>
+                                <div class="post-caption">
+                                    <span class="user-link">${post.username}</span> ${post.caption}
+                                </div>
                                 <div class="view-comments" onclick="openComments('${postId}', '${post.username}', '${post.caption}', 'https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0)}')">View comments</div>
                             </div>
                         `;
@@ -492,7 +528,7 @@
                                 <i class="fas fa-ellipsis-h post-options"></i>
                             </div>
                             <div class="post-image-container">
-                                <img class="post-image" src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg" alt="User Art" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not available</div></div>'">
+                                <img class="post-image" src="${post.image}" alt="User Art" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not available</div></div>'">
                             </div>
                             <div class="post-actions">
                                 <i class="far fa-heart post-like-btn" onclick="toggleLike(this, '${postId}')"></i>
