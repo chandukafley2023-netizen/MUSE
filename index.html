@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     
-    <!-- Fixed Favicon Link -->
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/Gemini_Generated_Image_pcaptlpcaptlpcap.png">
 
     <style>
@@ -20,16 +19,16 @@
             --text-color: #222;
             --subtle-text: #666;
             --border-color: #e5e7eb;
-            --card-bg: #ffffff;       /* New variable for card/menu backgrounds */
-            --hover-bg: #f5f5f5;      /* New variable for hover states */
+            --card-bg: #ffffff;       
+            --hover-bg: #f5f5f5;      
             --font-family: 'Inter', Arial, sans-serif;
-            --max-width: 600px; /* Standard feed width */
+            --max-width: 600px;
         }
 
-        /* --- Dark Mode Variables Override --- */
+        /* --- Dark Mode --- */
         body.dark-mode {
-            --secondary-color: #000000;   /* Main Background */
-            --card-bg: #121212;           /* Headers, Footers, Cards */
+            --secondary-color: #000000;
+            --card-bg: #121212;
             --text-color: #e0e0e0;
             --subtle-text: #a0a0a0;
             --border-color: #333333;
@@ -45,8 +44,8 @@
             line-height: 1.5;
             display: flex;
             flex-direction: column;
-            padding-bottom: 60px; /* Space for fixed bottom nav */
-            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
+            padding-bottom: 60px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .hidden { display: none !important; }
@@ -83,7 +82,6 @@
         }
 
         .logo span.ampersand { color: var(--primary-color); font-weight: 900; margin: 0 1px; }
-        
         .header-actions { position: relative; }
         .menu-trigger { font-size: 1.3rem; color: var(--text-color); cursor: pointer; padding: 5px; }
 
@@ -99,12 +97,9 @@
         .dropdown-item:hover { background-color: var(--hover-bg); }
         .dropdown-item i { width: 25px; color: var(--subtle-text); font-size: 1.1rem; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- Main Content --- */
+        /* --- Post Card --- */
         main { flex-grow: 1; width: 100%; max-width: var(--max-width); margin: 0 auto; padding-top: 5px; }
 
-        /* --- Post Card --- */
         .art-post { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 10px; transition: background-color 0.3s ease; }
         .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; }
         .user-info { display: flex; align-items: center; }
@@ -113,42 +108,57 @@
         .post-options { color: var(--subtle-text); cursor: pointer; }
         
         .post-image-container { width: 100%; background-color: var(--hover-bg); }
-        
+        .post-image { width: 100%; display: block; height: auto; object-fit: cover; }
         .post-placeholder {
             width: 100%; min-height: 350px; display: flex; justify-content: center;
             align-items: center; background-color: var(--hover-bg);
-            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
             color: var(--subtle-text); font-weight: 500; font-style: italic;
-            text-align: center; padding: 20px; box-sizing: border-box;
         }
-        .post-placeholder-inner { border: 2px dashed var(--border-color); width: 80%; height: 200px; display: flex; justify-content: center; align-items: center; border-radius: 12px; opacity: 0.5; }
-
-        .post-image { width: 100%; display: block; height: auto; object-fit: cover; }
 
         .post-actions { display: flex; align-items: center; padding: 10px 15px 5px; }
         .post-actions i { font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--text-color); transition: transform 0.1s; }
+        
+        /* Interactive States */
         .post-actions i.fa-heart.liked { color: var(--highlight-color); animation: likeBounce 0.3s; }
-        .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid icon when saved */
+        .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid bookmark */
         .post-actions i.last { margin-left: auto; margin-right: 0; }
 
-        @keyframes likeBounce { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-        
         .likes-count { font-size: 0.9rem; font-weight: 600; padding: 0 15px; margin-bottom: 5px; display: block; }
         .post-caption { padding: 0 15px; font-size: 0.9rem; margin-bottom: 5px; }
         .post-caption .user-link { font-weight: 600; margin-right: 5px; }
         .hashtags { color: var(--primary-color); }
         .view-comments { color: var(--subtle-text); font-size: 0.85rem; padding: 0 15px; cursor: pointer; margin-bottom: 10px; }
+
+        /* --- COMMENT MODAL STYLES --- */
+        .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; animation: fadeIn 0.2s ease; }
+        .modal-backdrop.open { display: flex; }
+        .comment-modal { background-color: var(--card-bg); width: 90%; max-width: 450px; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-color); }
+        .modal-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; position: relative; font-weight: 700; color: var(--text-color); }
+        .modal-close { position: absolute; right: 15px; top: 15px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); }
+        .modal-body { flex-grow: 1; overflow-y: auto; padding: 15px; }
+        .modal-footer { border-top: 1px solid var(--border-color); padding: 10px 15px; display: flex; align-items: center; }
+        .modal-input { flex-grow: 1; border: none; outline: none; background: transparent; color: var(--text-color); font-size: 0.9rem; font-family: inherit; }
+        .modal-post-btn { color: var(--primary-color); font-weight: 600; background: none; border: none; cursor: pointer; padding: 0 0 0 10px; }
         
-        /* --- Saved View Styles --- */
+        .modal-comment-item { display: flex; margin-bottom: 15px; font-size: 0.9rem; }
+        .modal-comment-avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; }
+        .modal-comment-text span { font-weight: 600; margin-right: 5px; }
+        .modal-comment-text p { margin: 0; color: var(--text-color); }
+        .modal-comment-time { font-size: 0.75rem; color: var(--subtle-text); margin-top: 2px; }
+
+        /* --- SAVED SECTION --- */
         #saved-container { display: none; padding: 10px; }
         .saved-header { padding: 15px; font-weight: 700; font-size: 1.2rem; text-align: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
-        
+
         /* --- Footer --- */
         footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); height: 60px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-around; align-items: center; transition: background-color 0.3s ease; }
         .footer-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--subtle-text); width: 25%; }
         .footer-nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
         .footer-nav-item span { font-size: 0.7rem; font-weight: 500; }
         .footer-nav-item.active { color: var(--primary-color); }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes likeBounce { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -160,11 +170,7 @@
             
             <div class="dropdown-menu" id="homeDropdown">
                 <a href="#" class="dropdown-item" onclick="checkAuth('access settings')"><i class="fas fa-cog"></i> Settings</a>
-                
-                <!-- Saved Button -->
                 <a href="#" class="dropdown-item" onclick="showSavedSection()"><i class="far fa-bookmark"></i> Saved</a>
-                
-                <a href="#" class="dropdown-item"><i class="fas fa-chart-bar"></i> Your Activity</a>
                 <a href="#" class="dropdown-item" id="darkModeToggle"><i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span></a>
                 <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
                 <a href="#" class="dropdown-item" id="authLink" style="color: var(--primary-color);"><i class="fas fa-sign-in-alt"></i> Log In</a>
@@ -176,7 +182,7 @@
         <!-- FEED SECTION -->
         <div id="feed-container">
             <!-- Static First Post -->
-            <div class="art-post">
+            <div class="art-post" id="static-post-container">
                 <div class="post-header">
                     <div class="user-info">
                         <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=M" alt="MUSE">
@@ -189,16 +195,16 @@
                          onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not found</div></div>'">
                 </div>
                 <div class="post-actions">
-                    <i class="far fa-heart post-like-btn" onclick="toggleLike(this)"></i>
-                    <i class="far fa-comment" onclick="checkAuth('comment')"></i>
+                    <i class="far fa-heart post-like-btn" onclick="toggleLike(this, 'static-first-post')"></i>
+                    <i class="far fa-comment" onclick="openComments('static-first-post', 'MUSE', 'Welcome to our new community of artists! 🎨✨', 'https://placehold.co/40x40/00bfff/ffffff?text=M')"></i>
                     <i class="far fa-bookmark last" onclick="toggleSave(this, 'static-first-post')"></i>
                 </div>
                 <span class="likes-count">0 likes</span>
                 <div class="post-caption"><span class="user-link">MUSE</span> Welcome to our new community of artists! 🎨✨ <span class="hashtags">#FirstPost #Art</span></div>
-                <div class="view-comments" onclick="checkAuth('view comments')">View comments</div>
+                <div class="view-comments" onclick="openComments('static-first-post', 'MUSE', 'Welcome to our new community of artists! 🎨✨', 'https://placehold.co/40x40/00bfff/ffffff?text=M')">View comments</div>
             </div>
 
-            <!-- Dynamic Posts -->
+            <!-- Dynamic Posts Area -->
             <div id="dynamic-posts-area">
                 <div style="text-align: center; padding: 20px; color: #666;">Loading more posts...</div>
             </div>
@@ -213,6 +219,18 @@
         </div>
     </main>
 
+    <!-- COMMENT MODAL -->
+    <div class="modal-backdrop" id="commentModal">
+        <div class="comment-modal">
+            <div class="modal-header">Comments <i class="fas fa-times modal-close" onclick="closeCommentModal()"></i></div>
+            <div class="modal-body" id="modalCommentsList"></div>
+            <div class="modal-footer">
+                <input type="text" class="modal-input" id="modalCommentInput" placeholder="Add a comment...">
+                <button class="modal-post-btn" onclick="postCommentInModal()">Post</button>
+            </div>
+        </div>
+    </div>
+
     <footer>
         <a href="#" onclick="showFeed()" class="footer-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
         <a href="explore.html" class="footer-nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
@@ -224,7 +242,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, orderBy, query, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, orderBy, query, doc, setDoc, deleteDoc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyBxqgmslZINTLdqF1LfC46eTMQMFyYFRr4",
@@ -241,6 +259,7 @@
         const db = getFirestore(app);
         
         let currentUser = null;
+        let activePostId = null;
 
         // Check Login Status
         onAuthStateChanged(auth, (user) => {
@@ -259,76 +278,127 @@
             } else {
                 authLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
                 authLink.style.color = '#00bfff';
-                authLink.onclick = (e) => { 
-                    e.preventDefault(); 
-                    safeRedirect('login.html');
-                };
+                authLink.onclick = (e) => { e.preventDefault(); safeRedirect('login.html'); };
                 authLink.href = '#';
             }
         }
 
-        // --- Safe Redirect Function ---
         function safeRedirect(url) {
-            try {
-                window.location.href = url;
-            } catch (e) {
-                console.warn("Preview navigation blocked. In a real browser, this goes to: " + url);
-                alert("Navigation blocked in preview. Please deploy to test login redirection.");
-            }
+            try { window.location.href = url; } catch (e) { console.warn("Preview nav blocked"); alert("Please navigate to " + url); }
         }
 
-        // --- Global Auth Check ---
-        window.checkAuth = function(action) {
-            if (!currentUser) {
-                safeRedirect('login.html');
-            } else {
-                alert(`${action} action triggered!`);
-            }
-        }
-
-        // --- Toggle Like Logic ---
-        window.toggleLike = function(btn) {
+        // --- ACTIONS ---
+        
+        // Toggle Like
+        window.toggleLike = async function(btn, postId) {
             if (!currentUser) { safeRedirect('login.html'); return; }
 
-            // Find the likes count element within the same post
+            const isLiked = btn.classList.contains('fas');
             const postContainer = btn.closest('.art-post');
             const likesCountElement = postContainer.querySelector('.likes-count');
             let currentLikes = parseInt(likesCountElement.textContent) || 0;
 
-            if (btn.classList.contains('fas')) {
-                // Unlike
+            // Optimistic UI Update
+            if (isLiked) {
                 btn.classList.remove('fas', 'liked');
                 btn.classList.add('far');
                 currentLikes = Math.max(0, currentLikes - 1);
             } else {
-                // Like
                 btn.classList.add('fas', 'liked');
                 btn.classList.remove('far');
                 currentLikes++;
             }
-            
             likesCountElement.textContent = `${currentLikes} likes`;
+
+            // Database Update (Skip for static post)
+            if (postId !== 'static-first-post') {
+                try {
+                    const postRef = doc(db, "posts", postId);
+                    await updateDoc(postRef, {
+                        likes: isLiked ? increment(-1) : increment(1)
+                    });
+                } catch (e) { console.error("Error updating like:", e); }
+            }
         }
 
-        // --- Toggle Menu ---
-        window.toggleMenu = function() {
-            document.getElementById('homeDropdown').classList.toggle('show');
+        // Toggle Save
+        window.toggleSave = async function(btn, postId) {
+            if (!currentUser) { safeRedirect('login.html'); return; }
+            
+            const isSaved = btn.classList.contains('fas');
+            const savedRef = doc(db, "users", currentUser.uid, "saved_posts", postId);
+
+            if (isSaved) {
+                btn.classList.remove('fas', 'saved');
+                btn.classList.add('far');
+                try { await deleteDoc(savedRef); } catch(e) { console.error(e); }
+            } else {
+                btn.classList.add('fas', 'saved');
+                btn.classList.remove('far');
+                try { await setDoc(savedRef, { savedAt: new Date() }); } catch(e) { console.error(e); }
+            }
         }
+
+        // --- COMMENTS ---
+        window.openComments = function(postId, username, caption, avatarUrl) {
+            if (!currentUser) { safeRedirect('login.html'); return; }
+            
+            activePostId = postId; 
+            const modal = document.getElementById('commentModal');
+            const list = document.getElementById('modalCommentsList');
+            
+            list.innerHTML = `
+                <div class="modal-comment-item">
+                    <img src="${avatarUrl}" class="modal-comment-avatar">
+                    <div class="modal-comment-text">
+                        <p><span>${username}</span> ${caption}</p>
+                        <div class="modal-comment-time">Original Post</div>
+                    </div>
+                </div>
+            `;
+            modal.classList.add('open');
+        }
+
+        window.closeCommentModal = function() {
+            document.getElementById('commentModal').classList.remove('open');
+        }
+
+        window.postCommentInModal = function() {
+            const input = document.getElementById('modalCommentInput');
+            const text = input.value.trim();
+            if (text) {
+                const list = document.getElementById('modalCommentsList');
+                const myUser = currentUser.displayName || currentUser.email.split('@')[0];
+                const newHTML = `
+                    <div class="modal-comment-item">
+                        <img src="https://placehold.co/32x32/00bfff/fff?text=${myUser.charAt(0).toUpperCase()}" class="modal-comment-avatar">
+                        <div class="modal-comment-text">
+                            <p><span>${myUser}</span> ${text}</p>
+                            <div class="modal-comment-time">Just now</div>
+                        </div>
+                    </div>`;
+                list.innerHTML += newHTML;
+                input.value = '';
+                list.scrollTop = list.scrollHeight;
+            }
+        }
+
+        // --- NAVIGATION ---
+        window.toggleMenu = function() { document.getElementById('homeDropdown').classList.toggle('show'); }
+        
         window.onclick = function(event) {
             if (!event.target.closest('.header-actions')) {
                 const dropdown = document.getElementById('homeDropdown');
                 if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
             }
+            if (event.target.classList.contains('modal-backdrop')) closeCommentModal();
         }
 
-        // --- NAVIGATION LOGIC (Feed vs Saved) ---
         window.showSavedSection = async function() {
             if (!currentUser) { safeRedirect('login.html'); return; }
-            
             document.getElementById('feed-container').style.display = 'none';
             document.getElementById('saved-container').style.display = 'block';
-            document.getElementById('homeDropdown').classList.remove('show'); // Close menu
-            
+            document.getElementById('homeDropdown').classList.remove('show');
             await loadSavedPosts();
         }
 
@@ -337,50 +407,23 @@
             document.getElementById('feed-container').style.display = 'block';
         }
 
-        // --- SAVE FEATURE LOGIC ---
-        window.toggleSave = async function(btn, postId) {
-            if (!currentUser) { safeRedirect('login.html'); return; }
-            
-            const isSaved = btn.classList.contains('fas'); // Solid icon means saved
-            const savedRef = doc(db, "users", currentUser.uid, "saved_posts", postId);
-
-            // Toggle UI immediately for responsiveness
-            if (isSaved) {
-                btn.classList.remove('fas', 'saved');
-                btn.classList.add('far');
-                try { await deleteDoc(savedRef); } catch(e) { console.error(e); }
-            } else {
-                btn.classList.add('fas', 'saved');
-                btn.classList.remove('far');
-                try { 
-                    // Save timestamp so we can order them later if needed
-                    await setDoc(savedRef, { savedAt: new Date() }); 
-                } catch(e) { console.error(e); }
-            }
-        }
-
+        // --- DATA LOADING ---
         async function loadSavedPosts() {
             const container = document.getElementById('saved-posts-list');
             container.innerHTML = '<div style="text-align:center; padding:20px;">Loading saved posts...</div>';
             
             try {
-                // 1. Get list of saved post IDs
-                const savedSnapshot = await getDocs(collection(db, "users", currentUser.uid, "saved_posts"));
-                
-                if (savedSnapshot.empty) {
+                const savedSnap = await getDocs(collection(db, "users", currentUser.uid, "saved_posts"));
+                if (savedSnap.empty) {
                     container.innerHTML = '<div style="text-align:center; padding:20px;">No saved posts yet.</div>';
                     return;
                 }
+                container.innerHTML = "";
                 
-                container.innerHTML = ""; // Clear loading
-
-                // 2. Fetch each post details
                 const promises = [];
-                savedSnapshot.forEach((savedDoc) => {
-                    const postId = savedDoc.id;
-                    
-                    // Handle static post manually
-                    if (postId === 'static-first-post') {
+                savedSnap.forEach(docSnap => {
+                     const postId = docSnap.id;
+                     if(postId === 'static-first-post') {
                          container.innerHTML += `
                             <div class="art-post">
                                 <div class="post-header"><div class="username">MUSE</div>
@@ -388,18 +431,16 @@
                                 </div>
                                 <div class="post-image-container"><img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg"></div>
                                 <div class="post-caption">Saved from Home</div>
+                                <div class="view-comments" onclick="openComments('${postId}', 'MUSE', 'Welcome...', 'https://placehold.co/40x40/00bfff/ffffff?text=M')">View comments</div>
                             </div>`;
                          return;
                     }
-
-                    const postRef = doc(db, "posts", postId);
-                    promises.push(getDoc(postRef));
+                    promises.push(getDoc(doc(db, "posts", postId)));
                 });
 
-                const postSnaps = await Promise.all(promises);
-                
-                postSnaps.forEach(postSnap => {
-                     if (postSnap && postSnap.exists()) {
+                const postDocs = await Promise.all(promises);
+                postDocs.forEach(postSnap => {
+                    if(postSnap.exists()) {
                         const post = postSnap.data();
                         const postId = postSnap.id;
                         const html = `
@@ -411,31 +452,25 @@
                                     </div>
                                     <i class="fas fa-bookmark post-options" style="color:black;" onclick="toggleSave(this, '${postId}'); this.closest('.art-post').remove()"></i>
                                 </div>
-                                <div class="post-image-container">
-                                    <img class="post-image" src="${post.image}" alt="Art">
-                                </div>
-                                <div class="post-caption">
-                                    <span class="user-link">${post.username}</span> ${post.caption}
-                                </div>
+                                <div class="post-image-container"><img class="post-image" src="${post.image}" alt="Art"></div>
+                                <div class="post-caption"><span class="user-link">${post.username}</span> ${post.caption}</div>
+                                <div class="view-comments" onclick="openComments('${postId}', '${post.username}', '${post.caption}', 'https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0)}')">View comments</div>
                             </div>
                         `;
                         container.innerHTML += html;
                     }
                 });
-
-            } catch (e) {
+            } catch(e) {
                 console.error(e);
-                container.innerHTML = '<div style="text-align:center; padding:20px;">Error loading saved posts.</div>';
+                container.innerHTML = '<div style="text-align:center; padding:20px;">Error loading saved.</div>';
             }
         }
 
-        // --- Load Feed Posts ---
         async function loadPosts() {
             const container = document.getElementById('dynamic-posts-area');
             try {
                 const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
-                
                 container.innerHTML = "";
 
                 if (querySnapshot.empty) {
@@ -446,12 +481,12 @@
                 querySnapshot.forEach((doc) => {
                     const post = doc.data();
                     const postId = doc.id;
-                    
+                    const avatarUrl = `https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0).toUpperCase()}`;
                     const html = `
-                        <div class="art-post">
+                        <div class="art-post" data-id="${postId}">
                             <div class="post-header">
                                 <div class="user-info">
-                                    <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0)}" alt="User">
+                                    <img class="avatar" src="${avatarUrl}" alt="User">
                                     <div class="username">${post.username}</div>
                                 </div>
                                 <i class="fas fa-ellipsis-h post-options"></i>
@@ -460,21 +495,20 @@
                                 <img class="post-image" src="${post.image}" alt="User Art" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not available</div></div>'">
                             </div>
                             <div class="post-actions">
-                                <i class="far fa-heart post-like-btn" onclick="toggleLike(this)"></i>
-                                <i class="far fa-comment" onclick="checkAuth('comment')"></i>
+                                <i class="far fa-heart post-like-btn" onclick="toggleLike(this, '${postId}')"></i>
+                                <i class="far fa-comment" onclick="openComments('${postId}', '${post.username}', '${post.caption.replace(/'/g, "\\'")}', '${avatarUrl}')"></i>
                                 <i class="far fa-bookmark last" onclick="toggleSave(this, '${postId}')"></i>
                             </div>
-                            <span class="likes-count">0 likes</span>
+                            <span class="likes-count">${post.likes || 0} likes</span>
                             <div class="post-caption">
                                 <span class="user-link">${post.username}</span> ${post.caption}
                                 ${post.forSale ? `<br><span style="color:green; font-weight:bold;">For Sale: $${post.price}</span>` : ''}
                             </div>
-                            <div class="view-comments" onclick="checkAuth('view comments')">View comments</div>
+                            <div class="view-comments" onclick="openComments('${postId}', '${post.username}', '${post.caption.replace(/'/g, "\\'")}', '${avatarUrl}')">View comments</div>
                         </div>
                     `;
                     container.innerHTML += html;
                 });
-
             } catch (error) {
                 console.error("Error loading posts: ", error);
                 container.innerHTML = "<div style='text-align:center; padding:20px;'>Connect to Firebase to see posts.</div>";
@@ -484,32 +518,10 @@
         // Dark Mode
         const darkModeToggle = document.getElementById('darkModeToggle');
         if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark-mode');
-        
         darkModeToggle.addEventListener('click', (e) => {
             e.preventDefault();
             document.body.classList.toggle('dark-mode');
-            const isDark = document.body.classList.contains('dark-mode');
-            const icon = document.getElementById('darkModeIcon');
-            const text = document.getElementById('darkModeText');
-            
-            if(icon) { icon.className = isDark ? 'far fa-sun' : 'far fa-moon'; }
-            if(text) text.textContent = isDark ? "Light Mode" : "Dark Mode";
-            
-            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-        });
-
-        // Local Like Toggle Logic (Visual)
-        document.addEventListener('click', function(e) {
-            if (e.target.classList.contains('post-like-btn')) {
-                if (!currentUser) return; // checkAuth handles redirect
-                if (e.target.classList.contains('fas')) {
-                    e.target.classList.remove('fas', 'liked');
-                    e.target.classList.add('far');
-                } else {
-                    e.target.classList.add('fas', 'liked');
-                    e.target.classList.remove('far');
-                }
-            }
+            localStorage.setItem('darkMode', document.body.classList.contains('dark-mode') ? 'enabled' : 'disabled');
         });
     </script>
 </body>
