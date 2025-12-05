@@ -2,92 +2,67 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>MUSE - Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MUSE - Home</title>
+    <!-- Font Awesome for social icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Pacifico&display=swap" rel="stylesheet">
     
+    <!-- Fixed Favicon Link -->
+    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/Gemini_Generated_Image_pcaptlpcaptlpcap.png">
+
     <style>
+        /* --- Root Variables and Reset --- */
         :root {
-            --primary-color: #00bfff;
-            --secondary-color: #f0f2f5;
-            --card-bg: #ffffff;
+            --primary-color: #00bfff; /* Sky Blue */
+            --secondary-color: #fff;
+            --highlight-color: #ff5722; /* Orange Accent */
             --text-color: #222;
             --subtle-text: #666;
             --border-color: #e5e7eb;
-            --hover-bg: #e0e0e0;
-            --footer-height: 60px;
-            --header-height: 60px;
-            --max-width: 600px;
+            --card-bg: #ffffff;       /* New variable for card/menu backgrounds */
+            --hover-bg: #f5f5f5;      /* New variable for hover states */
+            --font-family: 'Inter', Arial, sans-serif;
+            --max-width: 600px; /* Standard feed width */
         }
 
+        /* --- Dark Mode Variables Override --- */
         body.dark-mode {
-            --secondary-color: #000000;
-            --card-bg: #121212;
+            --secondary-color: #000000;   /* Main Background */
+            --card-bg: #121212;           /* Headers, Footers, Cards */
             --text-color: #e0e0e0;
             --subtle-text: #a0a0a0;
             --border-color: #333333;
-            --hover-bg: #2a2a2a;
+            --hover-bg: #1e1e1e;
         }
 
         body {
             margin: 0;
-            background-color: var(--secondary-color);
-            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background-color: var(--secondary-color); 
+            font-family: var(--font-family); 
             color: var(--text-color);
-            padding-bottom: calc(var(--footer-height) + 20px); 
-            overflow-x: hidden;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            line-height: 1.5;
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 60px; /* Space for fixed bottom nav */
+            transition: background-color 0.3s ease, color 0.3s ease; /* Smooth transition */
         }
 
         .hidden { display: none !important; }
-
-        /* --- GUEST VIEW STYLES --- */
-        .guest-container {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 20px;
-            background-color: var(--card-bg);
-            width: 100%;
-            position: fixed;
-            top: 0; left: 0;
-            z-index: 2000;
-        }
-        .guest-icon { font-size: 4rem; color: var(--subtle-text); margin-bottom: 20px; }
-        .guest-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 10px; }
-        .guest-text { color: var(--subtle-text); margin-bottom: 30px; max-width: 300px; }
-        .guest-btn {
-            background-color: var(--primary-color);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 1rem;
-            box-shadow: 0 4px 10px rgba(0, 191, 255, 0.2);
-        }
-
-        /* --- AUTHENTICATED CONTENT WRAPPER --- */
-        #auth-content {
-            display: none; /* Hidden by default until JS checks login */
-        }
-
-        /* --- HEADER --- */
+        
+        /* --- Header --- */
         header {
             background-color: var(--card-bg);
             border-bottom: 1px solid var(--border-color);
-            padding: 0 15px;
+            padding: 10px 15px;
             position: sticky;
             top: 0;
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            height: var(--header-height);
+            height: 50px;
             transition: background-color 0.3s ease;
         }
 
@@ -98,386 +73,159 @@
             color: var(--text-color);
             border: 2px solid var(--primary-color);
             border-radius: 50px;
-            padding: 4px 15px;
+            padding: 4px 20px;
             background-color: var(--card-bg);
             cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 191, 255, 0.1);
+            display: inline-block;
+            box-shadow: 0 2px 4px rgba(0, 191, 255, 0.1);
+            transition: background-color 0.3s ease;
+            letter-spacing: 1px;
         }
+
+        .logo span.ampersand { color: var(--primary-color); font-weight: 900; margin: 0 1px; }
         
-        .logo span { color: var(--primary-color); }
-
         .header-actions { position: relative; }
-        .menu-trigger { font-size: 1.3rem; color: var(--text-color); cursor: pointer; padding: 10px; }
+        .menu-trigger { font-size: 1.3rem; color: var(--text-color); cursor: pointer; padding: 5px; }
 
+        /* Dropdown Menu */
         .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 50px;
-            right: 0;
-            width: 200px;
-            background-color: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--border-color);
-            padding: 8px 0;
-            z-index: 2000;
+            display: none; position: absolute; top: 40px; right: 0; width: 200px;
+            background-color: var(--card-bg); border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); border: 1px solid var(--border-color);
+            padding: 8px 0; z-index: 2000;
         }
-
         .dropdown-menu.show { display: block; animation: fadeIn 0.2s ease; }
-
-        .dropdown-item {
-            padding: 12px 15px;
-            display: flex;
-            align-items: center;
-            color: var(--text-color);
-            text-decoration: none;
-            font-size: 0.95rem;
-            cursor: pointer;
-        }
+        .dropdown-item { padding: 10px 15px; display: flex; align-items: center; color: var(--text-color); text-decoration: none; transition: background 0.2s; font-size: 0.95rem; cursor: pointer;}
         .dropdown-item:hover { background-color: var(--hover-bg); }
         .dropdown-item i { width: 25px; color: var(--subtle-text); font-size: 1.1rem; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* --- PROFILE --- */
-        .profile-hero {
-            background-color: var(--card-bg);
-            padding-bottom: 20px;
-            text-align: center;
-            border-bottom: 1px solid var(--border-color);
-        }
+        /* --- Main Content --- */
+        main { flex-grow: 1; width: 100%; max-width: var(--max-width); margin: 0 auto; padding-top: 5px; }
 
-        .cover-photo {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(to right, #00bfff, #00d2ff);
-        }
-
-        .profile-pic-wrapper {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid var(--card-bg);
-            margin: -50px auto 10px;
-            position: relative;
-            z-index: 10;
-            background: var(--card-bg);
-        }
+        /* --- Post Card --- */
+        .art-post { background-color: var(--card-bg); border-bottom: 1px solid var(--border-color); margin-bottom: 10px; padding-bottom: 10px; transition: background-color 0.3s ease; }
+        .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 15px; }
+        .user-info { display: flex; align-items: center; }
+        .avatar { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; margin-right: 10px; border: 1px solid var(--border-color); }
+        .username { font-weight: 600; font-size: 0.9rem; color: var(--text-color); }
+        .post-options { color: var(--subtle-text); cursor: pointer; }
         
-        .profile-pic-lg {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-            object-fit: cover;
-        }
-
-        .profile-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 5px; color: var(--text-color);}
-        .profile-bio-text { color: var(--subtle-text); font-size: 0.9rem; max-width: 90%; margin: 0 auto 15px; line-height: 1.4; }
-
-        .profile-stats { display: flex; justify-content: center; gap: 30px; margin-bottom: 20px; }
-        .stat-box { text-align: center; }
-        .stat-num { display: block; font-weight: 700; font-size: 1.1rem; }
-        .stat-label { font-size: 0.8rem; color: var(--subtle-text); }
-
-        .btn {
-            padding: 8px 25px;
-            border-radius: 20px;
-            border: none;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: transform 0.1s, background-color 0.2s;
-        }
-        .btn:active { transform: scale(0.98); }
-        .btn-primary { background-color: var(--primary-color); color: white; }
-
-        /* --- GRID & TABS --- */
-        .content-area { max-width: var(--max-width); margin: 0 auto; }
-
-        .profile-tabs {
-            display: flex;
-            justify-content: center;
-            border-bottom: 1px solid var(--border-color);
-            background: var(--card-bg);
-            margin-top: 10px;
-        }
-        .tab-item {
-            flex: 1; 
-            text-align: center;
-            padding: 15px 0;
-            font-weight: 600;
-            color: var(--subtle-text);
-            cursor: pointer;
-            border-bottom: 2px solid transparent;
-            transition: color 0.3s, border-color 0.3s;
-        }
-        .tab-item.active {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-color);
-        }
-
-        .explore-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2px;
-            padding-bottom: 20px;
-        }
-        .explore-item {
-            aspect-ratio: 1/1;
-            background: var(--hover-bg);
-            position: relative;
-            cursor: pointer;
-            overflow: hidden;
-        }
-        .explore-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        /* --- EDIT VIEW --- */
-        .edit-container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            background: var(--card-bg);
-            min-height: 100vh;
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            z-index: 1500;
-        }
-        .edit-header {
-            padding: 0 15px;
-            height: var(--header-height);
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            position: sticky;
-            top: 0;
-            background: var(--card-bg);
-            z-index: 10;
-        }
-        .back-btn { font-size: 1.2rem; cursor: pointer; color: var(--text-color); background: none; border: none; padding: 10px;}
-        .save-btn { color: var(--primary-color); font-weight: 700; cursor: pointer; border: none; background: none; font-size: 1rem; padding: 10px; }
-
-        .edit-content { padding: 20px; }
-        .photo-section { display: flex; flex-direction: column; align-items: center; margin-bottom: 30px; }
-        .change-photo-btn { color: var(--primary-color); font-weight: 600; font-size: 0.9rem; cursor: pointer; margin-top: 10px; }
-
-        .form-group { margin-bottom: 20px; }
-        .label { display: block; font-size: 0.85rem; color: var(--subtle-text); margin-bottom: 5px; }
-        .input-field {
-            width: 100%; padding: 10px 0; border: none; border-bottom: 1px solid var(--border-color);
-            font-size: 1rem; font-family: inherit; outline: none; background: transparent;
-            color: var(--text-color);
-        }
-        .input-field:focus { border-bottom-color: var(--primary-color); }
-
-        /* --- FOOTER --- */
-        footer {
-            background-color: var(--card-bg);
-            border-top: 1px solid var(--border-color);
-            height: var(--footer-height);
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-        .nav-item { display: flex; flex-direction: column; align-items: center; color: var(--subtle-text); text-decoration: none; flex: 1; }
-        .nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
-        .nav-item span { font-size: 0.7rem; font-weight: 500; }
-        .nav-item.active { color: var(--primary-color); }
+        .post-image-container { width: 100%; background-color: var(--hover-bg); }
         
-        .personal-info-row { padding: 15px 0; border-bottom: 1px solid var(--border-color); }
-        .settings-link { color: var(--primary-color); cursor: pointer; margin-top: 20px; display: inline-block;}
+        .post-placeholder {
+            width: 100%; min-height: 350px; display: flex; justify-content: center;
+            align-items: center; background-color: var(--hover-bg);
+            border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
+            color: var(--subtle-text); font-weight: 500; font-style: italic;
+            text-align: center; padding: 20px; box-sizing: border-box;
+        }
+        .post-placeholder-inner { border: 2px dashed var(--border-color); width: 80%; height: 200px; display: flex; justify-content: center; align-items: center; border-radius: 12px; opacity: 0.5; }
 
-        /* --- COMMENT MODAL STYLES --- */
-        .modal-backdrop { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px); z-index: 2000; justify-content: center; align-items: center; animation: fadeIn 0.2s ease; }
-        .modal-backdrop.open { display: flex; }
-        .comment-modal { background-color: var(--card-bg); width: 90%; max-width: 450px; max-height: 80vh; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--border-color); }
-        .modal-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: center; position: relative; font-weight: 700; color: var(--text-color); }
-        .modal-close { position: absolute; right: 15px; top: 15px; cursor: pointer; font-size: 1.2rem; color: var(--text-color); }
-        .modal-body { flex-grow: 1; overflow-y: auto; padding: 15px; }
-        .modal-footer { border-top: 1px solid var(--border-color); padding: 10px 15px; display: flex; align-items: center; }
-        .modal-input { flex-grow: 1; border: none; outline: none; background: transparent; color: var(--text-color); font-size: 0.9rem; font-family: inherit; }
-        .modal-post-btn { color: var(--primary-color); font-weight: 600; background: none; border: none; cursor: pointer; padding: 0 0 0 10px; }
+        .post-image { width: 100%; display: block; height: auto; object-fit: cover; }
+
+        .post-actions { display: flex; align-items: center; padding: 10px 15px 5px; }
+        .post-actions i { font-size: 1.5rem; margin-right: 15px; cursor: pointer; color: var(--text-color); transition: transform 0.1s; }
+        .post-actions i.fa-heart.liked { color: var(--highlight-color); animation: likeBounce 0.3s; }
+        .post-actions i.fa-bookmark.saved { color: var(--text-color); font-weight: 900; } /* Solid icon when saved */
+        .post-actions i.last { margin-left: auto; margin-right: 0; }
+
+        @keyframes likeBounce { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         
-        .modal-comment-item { display: flex; margin-bottom: 15px; font-size: 0.9rem; }
-        .modal-comment-avatar { width: 32px; height: 32px; border-radius: 50%; margin-right: 10px; }
-        .modal-comment-text span { font-weight: 600; margin-right: 5px; }
-        .modal-comment-text p { margin: 0; color: var(--text-color); }
-        .modal-comment-time { font-size: 0.75rem; color: var(--subtle-text); margin-top: 2px; }
+        .likes-count { font-size: 0.9rem; font-weight: 600; padding: 0 15px; margin-bottom: 5px; display: block; }
+        .post-caption { padding: 0 15px; font-size: 0.9rem; margin-bottom: 5px; }
+        .post-caption .user-link { font-weight: 600; margin-right: 5px; }
+        .hashtags { color: var(--primary-color); }
+        .view-comments { color: var(--subtle-text); font-size: 0.85rem; padding: 0 15px; cursor: pointer; margin-bottom: 10px; }
+        
+        /* --- Saved View Styles --- */
+        #saved-container { display: none; padding: 10px; }
+        .saved-header { padding: 15px; font-weight: 700; font-size: 1.2rem; text-align: center; border-bottom: 1px solid var(--border-color); margin-bottom: 10px; }
+        
+        /* --- Footer --- */
+        footer { background-color: var(--card-bg); border-top: 1px solid var(--border-color); height: 60px; position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; display: flex; justify-content: space-around; align-items: center; transition: background-color 0.3s ease; }
+        .footer-nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--subtle-text); width: 25%; }
+        .footer-nav-item i { font-size: 1.4rem; margin-bottom: 4px; }
+        .footer-nav-item span { font-size: 0.7rem; font-weight: 500; }
+        .footer-nav-item.active { color: var(--primary-color); }
     </style>
 </head>
 <body>
+    
+    <header>
+        <div class="logo">MU<span class="ampersand">S</span>E</div>
+        <div class="header-actions">
+            <div class="menu-trigger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+            
+            <div class="dropdown-menu" id="homeDropdown">
+                <a href="#" class="dropdown-item" onclick="checkAuth('access settings')"><i class="fas fa-cog"></i> Settings</a>
+                
+                <!-- Saved Button -->
+                <a href="#" class="dropdown-item" onclick="showSavedSection()"><i class="far fa-bookmark"></i> Saved</a>
+                
+                <a href="#" class="dropdown-item"><i class="fas fa-chart-bar"></i> Your Activity</a>
+                <a href="#" class="dropdown-item" id="darkModeToggle"><i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span></a>
+                <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
+                <a href="#" class="dropdown-item" id="authLink" style="color: var(--primary-color);"><i class="fas fa-sign-in-alt"></i> Log In</a>
+            </div>
+        </div>
+    </header>
 
-    <!-- === GUEST VIEW (Shown if not logged in) === -->
-    <div id="guest-view" class="guest-container hidden">
-        <i class="fas fa-user-lock guest-icon"></i>
-        <div class="guest-title">Profile Locked</div>
-        <p class="guest-text">Please log in or sign up to view and edit your profile information.</p>
-        <a href="login.html" class="guest-btn">Log In / Sign Up</a>
-    </div>
-
-    <!-- === AUTHENTICATED CONTENT (Wrapped) === -->
-    <div id="auth-content">
-        
-        <div id="profile-view">
-            <header>
-                <div class="logo">MU<span class="ampersand">S</span>E</div>
-                <div class="header-actions">
-                    <div class="menu-trigger" onclick="toggleMenu()">
-                        <i class="fas fa-bars"></i>
+    <main>
+        <!-- FEED SECTION -->
+        <div id="feed-container">
+            <!-- Static First Post -->
+            <div class="art-post">
+                <div class="post-header">
+                    <div class="user-info">
+                        <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=M" alt="MUSE">
+                        <div class="username">MUSE</div>
                     </div>
-                    <div class="dropdown-menu" id="profileDropdown">
-                        <div class="dropdown-item"><i class="fas fa-cog"></i> Settings</div>
-                        <div class="dropdown-item"><i class="far fa-bookmark"></i> Saved</div>
-                        <div class="dropdown-item"><i class="fas fa-chart-bar"></i> Your Activity</div>
-                        <div class="dropdown-item" id="darkModeToggle">
-                            <i class="far fa-moon" id="darkModeIcon"></i> <span id="darkModeText">Dark Mode</span>
-                        </div>
-                        <div style="border-top: 1px solid var(--border-color); margin: 5px 0;"></div>
-                        <div class="dropdown-item" style="color: #ff5722;" onclick="logout()">
-                            <i class="fas fa-sign-out-alt" style="color: #ff5722;"></i> Log Out
-                        </div>
-                    </div>
+                    <i class="fas fa-ellipsis-h post-options"></i>
                 </div>
-            </header>
-
-            <div class="profile-hero">
-                <div class="cover-photo"></div>
-                <div class="profile-pic-wrapper">
-                    <img src="https://placehold.co/100x100/333/fff?text=Me" class="profile-pic-lg" id="view-profile-pic" alt="Profile Picture">
+                <div class="post-image-container">
+                    <img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg" alt="First Post" 
+                         onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not found</div></div>'">
                 </div>
-                <div class="profile-name" id="display-name">Loading...</div>
-                <div class="profile-bio-text" id="display-bio">...</div>
-                
-                <div class="profile-stats">
-                    <div class="stat-box"><span class="stat-num" id="post-count">0</span><span class="stat-label">Posts</span></div>
-                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Followers</span></div>
-                    <div class="stat-box"><span class="stat-num">0</span><span class="stat-label">Following</span></div>
+                <div class="post-actions">
+                    <i class="far fa-heart post-like-btn" onclick="toggleLike(this)"></i>
+                    <i class="far fa-comment" onclick="checkAuth('comment')"></i>
+                    <i class="far fa-bookmark last" onclick="toggleSave(this, 'static-first-post')"></i>
                 </div>
-                
-                <div class="profile-actions">
-                    <button class="btn btn-primary" onclick="showEditView()">Edit Profile</button>
-                </div>
+                <span class="likes-count">0 likes</span>
+                <div class="post-caption"><span class="user-link">MUSE</span> Welcome to our new community of artists! 🎨✨ <span class="hashtags">#FirstPost #Art</span></div>
+                <div class="view-comments" onclick="checkAuth('view comments')">View comments</div>
             </div>
 
-            <div class="content-area">
-                <div class="profile-tabs">
-                    <div class="tab-item active" id="tab-posts" onclick="switchTab('posts')"><i class="fas fa-th"></i> Posts</div>
-                    <div class="tab-item" id="tab-saved" onclick="switchTab('saved')"><i class="far fa-bookmark"></i> Saved</div>
-                </div>
-                <div class="explore-grid" id="profile-grid">
-                    <!-- User posts injected here -->
-                </div>
-            </div>
-
-            <footer>
-                <a href="index.html" class="nav-item"><i class="fas fa-home"></i><span>Home</span></a>
-                <a href="explore.html" class="nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
-                <a href="create.html" class="nav-item"><i class="fas fa-plus-square"></i><span>Create</span></a>
-                <a href="profile.html" class="nav-item active"><i class="fas fa-user-circle"></i><span>Profile</span></a>
-            </footer>
-        </div>
-
-        <!-- Edit View -->
-        <div id="edit-view" class="edit-container hidden">
-            <div class="edit-header">
-                <button class="back-btn" onclick="hideEditView()"><i class="fas fa-arrow-left"></i></button>
-                <div class="header-title" style="font-weight: 700;">Edit Profile</div>
-                <button class="save-btn" onclick="saveProfileChanges()">Save</button>
-            </div>
-
-            <div class="edit-content">
-                <div class="photo-section">
-                    <img src="" class="profile-pic-lg" id="edit-profile-pic" style="width: 100px; height: 100px; object-fit: cover;">
-                    <input type="file" id="profile-upload" accept="image/*" style="display: none;">
-                    <div class="change-photo-btn" onclick="document.getElementById('profile-upload').click()">Change Profile Photo</div>
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Name</label>
-                    <input type="text" class="input-field" id="edit-name">
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Username</label>
-                    <input type="text" class="input-field" id="edit-username">
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Bio</label>
-                    <textarea class="input-field" id="edit-bio" rows="3" style="resize: none;"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="label">Website</label>
-                    <input type="text" class="input-field" id="edit-website">
-                </div>
-                
-                <div class="form-group">
-                    <div class="settings-link" onclick="showPersonalInfo()">Personal Information Settings</div>
-                </div>
+            <!-- Dynamic Posts -->
+            <div id="dynamic-posts-area">
+                <div style="text-align: center; padding: 20px; color: #666;">Loading more posts...</div>
             </div>
         </div>
 
-        <!-- Personal Info View -->
-        <div id="personal-info-view" class="edit-container hidden">
-            <div class="edit-header">
-                <button class="back-btn" onclick="hidePersonalInfo()"><i class="fas fa-arrow-left"></i></button>
-                <div class="header-title" style="font-weight: 700;">Personal Info</div>
-                <div style="width: 35px;"></div> </div>
-
-            <div class="edit-content">
-                <p style="font-size: 0.85rem; color: var(--subtle-text); margin-bottom: 20px; line-height: 1.4;">
-                    Provide your personal information, even if the account is used for a business. This won't be part of your public profile.
-                </p>
-
-                <div class="personal-info-row">
-                    <div class="label">E-mail Address</div>
-                    <div style="font-weight: 500;" id="info-email">loading...</div>
-                </div>
-
-                <div class="personal-info-row">
-                    <div class="label">Phone Number</div>
-                    <div style="font-weight: 500;">+975 17 00 00 00</div>
-                </div>
-
-                <div class="personal-info-row">
-                    <div class="label">Gender</div>
-                    <div style="font-weight: 500;">Male</div>
-                </div>
-
-                <div class="personal-info-row">
-                    <div class="label">Birthday</div>
-                    <div style="font-weight: 500;">23 October 2009</div>
-                </div>
+        <!-- SAVED SECTION (Hidden by default) -->
+        <div id="saved-container">
+            <div class="saved-header">Saved Posts</div>
+            <div id="saved-posts-list">
+                <div style="text-align: center; padding: 20px; color: #666;">No saved posts yet.</div>
             </div>
         </div>
+    </main>
 
-    </div>
-
-    <!-- COMMENT MODAL -->
-    <div class="modal-backdrop" id="commentModal">
-        <div class="comment-modal">
-            <div class="modal-header">Comments <i class="fas fa-times modal-close" onclick="closeCommentModal()"></i></div>
-            <div class="modal-body" id="modalCommentsList"></div>
-            <div class="modal-footer">
-                <input type="text" class="modal-input" id="modalCommentInput" placeholder="Add a comment...">
-                <button class="modal-post-btn" onclick="postCommentInModal()">Post</button>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <a href="#" onclick="showFeed()" class="footer-nav-item active"><i class="fas fa-home"></i><span>Home</span></a>
+        <a href="explore.html" class="footer-nav-item"><i class="fas fa-compass"></i><span>Explore</span></a>
+        <a href="create.html" class="footer-nav-item"><i class="fas fa-plus-square"></i><span>Create</span></a>
+        <a href="profile.html" class="footer-nav-item"><i class="fas fa-user-circle"></i><span>Profile</span></a>
+    </footer>
 
     <!-- FIREBASE SCRIPT -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, getDoc, setDoc, query, where, orderBy, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, getDocs, orderBy, query, doc, setDoc, deleteDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // 1. YOUR REAL FIREBASE KEYS
         const firebaseConfig = {
             apiKey: "AIzaSyBxqgmslZINTLdqF1LfC46eTMQMFyYFRr4",
             authDomain: "artandshare-175b3.firebaseapp.com",
@@ -491,360 +239,278 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-
-        let currentUser = null;
-        let tempProfilePicData = null;
-        let activePostId = null;
         
-        const guestView = document.getElementById('guest-view');
-        const authContent = document.getElementById('auth-content');
+        let currentUser = null;
 
-        // --- Check Login Status ---
-        onAuthStateChanged(auth, async (user) => {
-            const isDevBypass = window.location.hash === '#admin';
-
-            if (user || isDevBypass) {
-                currentUser = user;
-                guestView.classList.add('hidden');
-                authContent.style.display = 'block';
-                
-                if (user) {
-                    await checkAndLoadProfile(user);
-                }
-            } else {
-                authContent.style.display = 'none';
-                guestView.classList.remove('hidden');
-            }
+        // Check Login Status
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            updateAuthUI();
+            loadPosts(); 
         });
 
-        // --- Check & Load Profile Logic ---
-        async function checkAndLoadProfile(user) {
-            const userRef = doc(db, "users", user.uid);
-            const userSnap = await getDoc(userRef);
-
-            if (userSnap.exists()) {
-                const data = userSnap.data();
-                updateDisplay(data);
-                updateInputs(data);
+        function updateAuthUI() {
+            const authLink = document.getElementById('authLink');
+            if (currentUser) {
+                authLink.innerHTML = '<i class="fas fa-sign-out-alt"></i> Log Out';
+                authLink.style.color = '#ff5722';
+                authLink.onclick = (e) => { e.preventDefault(); signOut(auth).then(() => window.location.reload()); };
+                authLink.removeAttribute('href');
             } else {
-                console.log("New user detected. Forcing profile setup.");
-                const basicData = {
-                    username: user.displayName || user.email.split('@')[0],
-                    email: user.email
+                authLink.innerHTML = '<i class="fas fa-sign-in-alt"></i> Log In';
+                authLink.style.color = '#00bfff';
+                authLink.onclick = (e) => { 
+                    e.preventDefault(); 
+                    safeRedirect('login.html');
                 };
-                updateInputs(basicData);
-                showEditView();
-                alert("Welcome! Please set up your profile to continue.");
+                authLink.href = '#';
             }
-
-            loadUserPosts(user.uid);
-            document.getElementById('info-email').textContent = user.email;
         }
 
-        // --- UI Helpers ---
-        const display = {
-            name: document.getElementById('display-name'),
-            bio: document.getElementById('display-bio'),
-            pic: document.getElementById('view-profile-pic')
-        };
-
-        const inputs = {
-            name: document.getElementById('edit-name'),
-            bio: document.getElementById('edit-bio'),
-            username: document.getElementById('edit-username'),
-            website: document.getElementById('edit-website'),
-            pic: document.getElementById('edit-profile-pic'),
-            file: document.getElementById('profile-upload')
-        };
-
-        function updateDisplay(data) {
-            display.name.textContent = data.name || "New Artist";
-            display.bio.textContent = data.bio || "No bio yet.";
-            if (data.profilePic) display.pic.src = data.profilePic;
+        // --- Safe Redirect Function ---
+        function safeRedirect(url) {
+            try {
+                window.location.href = url;
+            } catch (e) {
+                console.warn("Preview navigation blocked. In a real browser, this goes to: " + url);
+                alert("Navigation blocked in preview. Please deploy to test login redirection.");
+            }
         }
 
-        function updateInputs(data) {
-            inputs.name.value = data.name || "";
-            inputs.bio.value = data.bio || "";
-            inputs.username.value = data.username || "";
-            inputs.website.value = data.website || "";
-            if (data.profilePic) inputs.pic.src = data.profilePic;
-        }
-
-        // --- Switch Tabs ---
-        window.switchTab = function(tab) {
-            const tabPosts = document.getElementById('tab-posts');
-            const tabSaved = document.getElementById('tab-saved');
-            
-            if(tab === 'posts') {
-                tabPosts.classList.add('active');
-                tabSaved.classList.remove('active');
-                loadUserPosts(currentUser.uid);
+        // --- Global Auth Check ---
+        window.checkAuth = function(action) {
+            if (!currentUser) {
+                safeRedirect('login.html');
             } else {
-                tabSaved.classList.add('active');
-                tabPosts.classList.remove('active');
-                loadSavedPosts(currentUser.uid);
+                alert(`${action} action triggered!`);
             }
         }
 
-        // --- Load User Posts ---
-        async function loadUserPosts(userId) {
-            const grid = document.getElementById('profile-grid');
-            const postCount = document.getElementById('post-count');
-            grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">Loading...</div>';
+        // --- Toggle Like Logic ---
+        window.toggleLike = function(btn) {
+            if (!currentUser) { safeRedirect('login.html'); return; }
+
+            // Find the likes count element within the same post
+            const postContainer = btn.closest('.art-post');
+            const likesCountElement = postContainer.querySelector('.likes-count');
+            let currentLikes = parseInt(likesCountElement.textContent) || 0;
+
+            if (btn.classList.contains('fas')) {
+                // Unlike
+                btn.classList.remove('fas', 'liked');
+                btn.classList.add('far');
+                currentLikes = Math.max(0, currentLikes - 1);
+            } else {
+                // Like
+                btn.classList.add('fas', 'liked');
+                btn.classList.remove('far');
+                currentLikes++;
+            }
+            
+            likesCountElement.textContent = `${currentLikes} likes`;
+        }
+
+        // --- Toggle Menu ---
+        window.toggleMenu = function() {
+            document.getElementById('homeDropdown').classList.toggle('show');
+        }
+        window.onclick = function(event) {
+            if (!event.target.closest('.header-actions')) {
+                const dropdown = document.getElementById('homeDropdown');
+                if (dropdown.classList.contains('show')) dropdown.classList.remove('show');
+            }
+        }
+
+        // --- NAVIGATION LOGIC (Feed vs Saved) ---
+        window.showSavedSection = async function() {
+            if (!currentUser) { safeRedirect('login.html'); return; }
+            
+            document.getElementById('feed-container').style.display = 'none';
+            document.getElementById('saved-container').style.display = 'block';
+            document.getElementById('homeDropdown').classList.remove('show'); // Close menu
+            
+            await loadSavedPosts();
+        }
+
+        window.showFeed = function() {
+            document.getElementById('saved-container').style.display = 'none';
+            document.getElementById('feed-container').style.display = 'block';
+        }
+
+        // --- SAVE FEATURE LOGIC ---
+        window.toggleSave = async function(btn, postId) {
+            if (!currentUser) { safeRedirect('login.html'); return; }
+            
+            const isSaved = btn.classList.contains('fas'); // Solid icon means saved
+            const savedRef = doc(db, "users", currentUser.uid, "saved_posts", postId);
+
+            // Toggle UI immediately for responsiveness
+            if (isSaved) {
+                btn.classList.remove('fas', 'saved');
+                btn.classList.add('far');
+                try { await deleteDoc(savedRef); } catch(e) { console.error(e); }
+            } else {
+                btn.classList.add('fas', 'saved');
+                btn.classList.remove('far');
+                try { 
+                    // Save timestamp so we can order them later if needed
+                    await setDoc(savedRef, { savedAt: new Date() }); 
+                } catch(e) { console.error(e); }
+            }
+        }
+
+        async function loadSavedPosts() {
+            const container = document.getElementById('saved-posts-list');
+            container.innerHTML = '<div style="text-align:center; padding:20px;">Loading saved posts...</div>';
             
             try {
-                const q = query(collection(db, "posts"), where("userId", "==", userId));
+                // 1. Get list of saved post IDs
+                const savedSnapshot = await getDocs(collection(db, "users", currentUser.uid, "saved_posts"));
+                
+                if (savedSnapshot.empty) {
+                    container.innerHTML = '<div style="text-align:center; padding:20px;">No saved posts yet.</div>';
+                    return;
+                }
+                
+                container.innerHTML = ""; // Clear loading
+
+                // 2. Fetch each post details
+                const promises = [];
+                savedSnapshot.forEach((savedDoc) => {
+                    const postId = savedDoc.id;
+                    
+                    // Handle static post manually
+                    if (postId === 'static-first-post') {
+                         container.innerHTML += `
+                            <div class="art-post">
+                                <div class="post-header"><div class="username">MUSE</div>
+                                <i class="fas fa-bookmark post-options" style="color:black;" onclick="toggleSave(this, '${postId}'); this.closest('.art-post').remove()"></i>
+                                </div>
+                                <div class="post-image-container"><img class="post-image" src="Screenshot_2025-11-30_at_10.54.44_AM_optimized_250_1_optimized_750.jpg"></div>
+                                <div class="post-caption">Saved from Home</div>
+                            </div>`;
+                         return;
+                    }
+
+                    const postRef = doc(db, "posts", postId);
+                    promises.push(getDoc(postRef));
+                });
+
+                const postSnaps = await Promise.all(promises);
+                
+                postSnaps.forEach(postSnap => {
+                     if (postSnap && postSnap.exists()) {
+                        const post = postSnap.data();
+                        const postId = postSnap.id;
+                        const html = `
+                            <div class="art-post">
+                                <div class="post-header">
+                                    <div class="user-info">
+                                        <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0)}" alt="User">
+                                        <div class="username">${post.username}</div>
+                                    </div>
+                                    <i class="fas fa-bookmark post-options" style="color:black;" onclick="toggleSave(this, '${postId}'); this.closest('.art-post').remove()"></i>
+                                </div>
+                                <div class="post-image-container">
+                                    <img class="post-image" src="${post.image}" alt="Art">
+                                </div>
+                                <div class="post-caption">
+                                    <span class="user-link">${post.username}</span> ${post.caption}
+                                </div>
+                            </div>
+                        `;
+                        container.innerHTML += html;
+                    }
+                });
+
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<div style="text-align:center; padding:20px;">Error loading saved posts.</div>';
+            }
+        }
+
+        // --- Load Feed Posts ---
+        async function loadPosts() {
+            const container = document.getElementById('dynamic-posts-area');
+            try {
+                const q = query(collection(db, "posts"), orderBy("createdAt", "desc"));
                 const querySnapshot = await getDocs(q);
                 
-                grid.innerHTML = "";
-                postCount.textContent = querySnapshot.size;
+                container.innerHTML = "";
 
-                if(querySnapshot.empty) {
-                    grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">No posts yet.</div>';
+                if (querySnapshot.empty) {
+                    container.innerHTML = "<div style='text-align:center; padding:20px;'>No new posts yet.</div>";
                     return;
                 }
 
                 querySnapshot.forEach((doc) => {
                     const post = doc.data();
                     const postId = doc.id;
-                    const div = document.createElement('div');
-                    div.className = 'explore-item';
-                    div.innerHTML = `<img src="${post.image}" alt="User Post">`;
-                    // Make clickable to open comment modal
-                    const avatarUrl = `https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0).toUpperCase()}`;
-                    div.onclick = () => openComments(postId, post.username, post.caption, avatarUrl);
-                    grid.appendChild(div);
-                });
-            } catch (e) {
-                console.error("Error loading profile posts:", e);
-                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1;">Error loading posts.</div>';
-            }
-        }
-
-        // --- Load Saved Posts ---
-        async function loadSavedPosts(userId) {
-            const grid = document.getElementById('profile-grid');
-            grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">Loading saved...</div>';
-            
-            try {
-                const savedSnap = await getDocs(collection(db, "users", userId, "saved_posts"));
-                
-                if (savedSnap.empty) {
-                    grid.innerHTML = '<div style="text-align:center; grid-column:1/-1; padding:20px;">No saved posts.</div>';
-                    return;
-                }
-                
-                grid.innerHTML = "";
-                
-                const promises = [];
-                savedSnap.forEach(docSnap => {
-                     const postId = docSnap.id;
-                     if(postId === 'static-first-post') {
-                         const div = document.createElement('div');
-                         div.className = 'explore-item';
-                         div.innerHTML = `<img src="https://raw.githubusercontent.com/chandukafley2023-netizen/MUSE/refs/heads/main/This%20is%20better.%2C%2C%2C%2C%2C%2C%2C%20Oil%20Painting%20on%20Canvas.jpeg" alt="Saved Post">`;
-                         div.onclick = () => openComments('static-first-post', 'MUSE', 'Welcome to our new community...', 'https://placehold.co/40x40/00bfff/ffffff?text=M');
-                         grid.appendChild(div);
-                     } else {
-                         promises.push(getDoc(doc(db, "posts", postId)));
-                     }
-                });
-
-                const postDocs = await Promise.all(promises);
-                postDocs.forEach(postSnap => {
-                    if(postSnap.exists()) {
-                        const post = postSnap.data();
-                        const postId = postSnap.id;
-                        const div = document.createElement('div');
-                        div.className = 'explore-item';
-                        div.innerHTML = `<img src="${post.image}" alt="Saved Post">`;
-                        const avatarUrl = `https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0).toUpperCase()}`;
-                        div.onclick = () => openComments(postId, post.username, post.caption, avatarUrl);
-                        grid.appendChild(div);
-                    }
-                });
-            } catch(e) {
-                console.error(e);
-                grid.innerHTML = '<div style="text-align:center; grid-column:1/-1;">Error loading saved.</div>';
-            }
-        }
-
-        // --- Image Compression ---
-        function resizeImage(file, maxWidth, maxHeight, quality, callback) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const img = new Image();
-                img.onload = function() {
-                    let width = img.width;
-                    let height = img.height;
-                    if (width > height) {
-                        if (width > maxWidth) { height *= maxWidth / width; width = maxWidth; }
-                    } else {
-                        if (height > maxHeight) { width *= maxHeight / height; height = maxHeight; }
-                    }
-                    const canvas = document.createElement('canvas');
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    callback(canvas.toDataURL('image/jpeg', quality));
-                };
-                img.src = event.target.result;
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // --- Save to Firestore ---
-        window.saveProfileChanges = async function() {
-            if (!currentUser) return;
-            const btn = document.querySelector('.save-btn');
-            btn.textContent = "Saving...";
-            btn.disabled = true;
-
-            try {
-                let finalPic = tempProfilePicData || display.pic.src;
-                const profileData = {
-                    name: inputs.name.value,
-                    bio: inputs.bio.value,
-                    username: inputs.username.value,
-                    website: inputs.website.value,
-                    profilePic: finalPic,
-                    email: currentUser.email 
-                };
-                await setDoc(doc(db, "users", currentUser.uid), profileData, { merge: true });
-                updateDisplay(profileData);
-                hideEditView();
-                btn.textContent = "Save";
-                btn.disabled = false;
-                alert("Profile updated!");
-            } catch (e) {
-                console.error(e);
-                alert("Error saving. Profile picture might be too large.");
-                btn.textContent = "Save";
-                btn.disabled = false;
-            }
-        }
-
-        // --- File Upload ---
-        if (inputs.file) {
-            inputs.file.addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    if (file.size > 2 * 1024 * 1024) { 
-                        alert("Image is too large! Please choose an image under 2MB.");
-                        return;
-                    }
-                    resizeImage(file, 500, 500, 0.7, function(resizedDataUrl) {
-                         inputs.pic.src = resizedDataUrl;
-                         tempProfilePicData = resizedDataUrl;
-                    });
-                }
-            });
-        }
-
-        // --- Comment Modal Logic ---
-        window.openComments = function(postId, username, caption, avatarUrl) {
-            if (!currentUser) { window.location.href = 'login.html'; return; }
-            
-            activePostId = postId; 
-            const modal = document.getElementById('commentModal');
-            const list = document.getElementById('modalCommentsList');
-            
-            list.innerHTML = `
-                <div class="modal-comment-item">
-                    <img src="${avatarUrl}" class="modal-comment-avatar">
-                    <div class="modal-comment-text">
-                        <p><span>${username}</span> ${caption}</p>
-                        <div class="modal-comment-time">Original Post</div>
-                    </div>
-                </div>
-            `;
-            
-            modal.classList.add('open');
-        }
-
-        window.closeCommentModal = function() {
-            document.getElementById('commentModal').classList.remove('open');
-        }
-
-        window.postCommentInModal = function() {
-            const input = document.getElementById('modalCommentInput');
-            const text = input.value.trim();
-            if (text) {
-                const list = document.getElementById('modalCommentsList');
-                const myUser = currentUser.displayName || currentUser.email.split('@')[0];
-                
-                const newHTML = `
-                    <div class="modal-comment-item">
-                        <img src="https://placehold.co/32x32/00bfff/fff?text=${myUser.charAt(0).toUpperCase()}" class="modal-comment-avatar">
-                        <div class="modal-comment-text">
-                            <p><span>${myUser}</span> ${text}</p>
-                            <div class="modal-comment-time">Just now</div>
+                    
+                    const html = `
+                        <div class="art-post">
+                            <div class="post-header">
+                                <div class="user-info">
+                                    <img class="avatar" src="https://placehold.co/40x40/00bfff/ffffff?text=${post.username.charAt(0)}" alt="User">
+                                    <div class="username">${post.username}</div>
+                                </div>
+                                <i class="fas fa-ellipsis-h post-options"></i>
+                            </div>
+                            <div class="post-image-container">
+                                <img class="post-image" src="${post.image}" alt="User Art" onerror="this.onerror=null;this.parentElement.innerHTML='<div class=\'post-placeholder\'><div class=\'post-placeholder-inner\'>Image not available</div></div>'">
+                            </div>
+                            <div class="post-actions">
+                                <i class="far fa-heart post-like-btn" onclick="toggleLike(this)"></i>
+                                <i class="far fa-comment" onclick="checkAuth('comment')"></i>
+                                <i class="far fa-bookmark last" onclick="toggleSave(this, '${postId}')"></i>
+                            </div>
+                            <span class="likes-count">0 likes</span>
+                            <div class="post-caption">
+                                <span class="user-link">${post.username}</span> ${post.caption}
+                                ${post.forSale ? `<br><span style="color:green; font-weight:bold;">For Sale: $${post.price}</span>` : ''}
+                            </div>
+                            <div class="view-comments" onclick="checkAuth('view comments')">View comments</div>
                         </div>
-                    </div>
-                `;
-                list.innerHTML += newHTML;
-                input.value = '';
-                list.scrollTop = list.scrollHeight;
+                    `;
+                    container.innerHTML += html;
+                });
+
+            } catch (error) {
+                console.error("Error loading posts: ", error);
+                container.innerHTML = "<div style='text-align:center; padding:20px;'>Connect to Firebase to see posts.</div>";
             }
         }
 
-        document.getElementById('modalCommentInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') postCommentInModal();
+        // Dark Mode
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        if (localStorage.getItem('darkMode') === 'enabled') document.body.classList.add('dark-mode');
+        
+        darkModeToggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            const icon = document.getElementById('darkModeIcon');
+            const text = document.getElementById('darkModeText');
+            
+            if(icon) { icon.className = isDark ? 'far fa-sun' : 'far fa-moon'; }
+            if(text) text.textContent = isDark ? "Light Mode" : "Dark Mode";
+            
+            localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
         });
 
-        // --- Navigation ---
-        window.showEditView = function() {
-            document.getElementById('profile-view').classList.add('hidden');
-            document.getElementById('edit-view').classList.remove('hidden');
-        }
-        window.hideEditView = function() {
-            document.getElementById('edit-view').classList.add('hidden');
-            document.getElementById('profile-view').classList.remove('hidden');
-        }
-        window.showPersonalInfo = function() {
-            document.getElementById('edit-view').classList.add('hidden');
-            document.getElementById('personal-info-view').classList.remove('hidden');
-        }
-        window.hidePersonalInfo = function() {
-            document.getElementById('personal-info-view').classList.add('hidden');
-            document.getElementById('edit-view').classList.remove('hidden');
-        }
-        window.toggleMenu = function() { 
-            document.getElementById('profileDropdown').classList.toggle('show'); 
-        }
-        window.logout = function() {
-            signOut(auth).then(() => window.location.reload());
-        }
-        window.onclick = function(event) {
-            if (!event.target.closest('.header-actions')) {
-                const dropdown = document.getElementById('profileDropdown');
-                if (dropdown && dropdown.classList.contains('show')) dropdown.classList.remove('show');
+        // Local Like Toggle Logic (Visual)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('post-like-btn')) {
+                if (!currentUser) return; // checkAuth handles redirect
+                if (e.target.classList.contains('fas')) {
+                    e.target.classList.remove('fas', 'liked');
+                    e.target.classList.add('far');
+                } else {
+                    e.target.classList.add('fas', 'liked');
+                    e.target.classList.remove('far');
+                }
             }
-            if (event.target.classList.contains('modal-backdrop')) closeCommentModal();
-        }
-        
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const darkModeIcon = document.getElementById('darkModeIcon');
-        const darkModeText = document.getElementById('darkModeText');
-
-        if (localStorage.getItem('darkMode') === 'enabled') {
-            document.body.classList.add('dark-mode');
-            if(darkModeIcon) { darkModeIcon.classList.remove('fa-moon'); darkModeIcon.classList.add('fa-sun'); }
-            if(darkModeText) darkModeText.textContent = "Light Mode";
-        }
-        
-        if (darkModeToggle) {
-            darkModeToggle.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.body.classList.toggle('dark-mode');
-                const isDark = document.body.classList.contains('dark-mode');
-                if(darkModeIcon) { darkModeIcon.className = isDark ? 'far fa-sun' : 'far fa-moon'; }
-                if(darkModeText) darkModeText.textContent = isDark ? "Light Mode" : "Dark Mode";
-                localStorage.setItem('darkMode', isDark ? 'enabled' : 'disabled');
-            });
-        }
+        });
     </script>
 </body>
 </html>
